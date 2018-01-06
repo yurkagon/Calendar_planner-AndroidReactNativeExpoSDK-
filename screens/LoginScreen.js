@@ -39,32 +39,27 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <ScrollView style={styles.page}>
-                {/* <StatusBar
-                    hidden={false} 
-                    backgroundColor="#fff"
-                    translucent={true} 
-                /> */}
                 <View style={styles.container}>
                     <Image
-                        style={{width: 250, height: 250, marginBottom: 100}}
+                        style={styles.logoImage}
                         source={require('../assets/images/robot-dev.png')}
                     />
-                    <View style={{width: 250, height: 100, flexDirection: 'column'}}>
-                        <Text style={{fontSize:22}}>
+                    <View style={styles.loginContainer}>
+                        <Text style={styles.loginText}>
                             {/*space symbols*/}
                             Please, login via &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;
                             <Ionicons
                                 name={'logo-googleplus'}
                                 size={33}
-                                style={{ padding: 333 }}
                                 color="#4680dd"
                             />
                         </Text>
-                        <Button
-                            title="Google Sign In"
-                            onPress={this.signInWithGoogleAsync.bind(this)}
-                            accessibilityLabel="some text"
-                        />
+                        <View style={styles.loginButton}>
+                            <Button
+                                title="Google Sign In"
+                                onPress={this.signInWithGoogleAsync.bind(this)}        
+                            />
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -75,21 +70,31 @@ export default class LoginScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  container:{
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 100,
-  },
-  text: {
-      color: 'blue'
-  },
-  buttonSign:{
-
-  }
+    page: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    container:{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 100,
+    },
+    logoImage:{
+        width: 250,
+        height: 250,
+    },
+    loginContainer:{
+        width: 250,
+        height: 100,
+        flexDirection: 'column',
+        marginTop: 105,
+    },
+    loginText:{
+        fontSize:22,
+    },
+    loginButton:{
+        marginTop: 5,
+    }
 });
