@@ -8,9 +8,9 @@ import LoginScreen from '../screens/LoginScreen';
 
 const RootStackNavigator = StackNavigator(
   {
-    // Login:{
-    //   screen: LoginScreen,
-    // },
+    Login:{
+      screen: LoginScreen,
+    },
     Main: {
       screen: MainTabNavigator,
     },
