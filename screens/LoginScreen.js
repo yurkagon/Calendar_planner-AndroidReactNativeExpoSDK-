@@ -45,7 +45,7 @@ export default class LoginScreen extends React.Component {
                 <View style={styles.container}>
                     <Image
                         style={styles.logoImage}
-                        source={require('../assets/images/robot-dev.png')}
+                        source={require('../assets/images/logo.gif')}
                     />
                     <View style={styles.loginContainer}>
                         <Text style={styles.loginText}>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         paddingTop: 100,
     },
     logoImage:{
-        width: 250,
+        width: 400,
         height: 250,
     },
     loginContainer:{
