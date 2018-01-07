@@ -15,9 +15,8 @@ var clientId = "146220515786-1kv2u1ugl9cm5ciifoijegbl5e6k60gm.apps.googleusercon
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
-        header: false,
+        header: null,
     };
-
 
     async signInWithGoogleAsync() {
         try {
@@ -27,6 +26,7 @@ export default class LoginScreen extends React.Component {
             });
 
             if (result.type === 'success') {
+                this.props.navigation.navigate("Main");//test
                 return result.accessToken;
             } else {
                 return {cancelled: true};
