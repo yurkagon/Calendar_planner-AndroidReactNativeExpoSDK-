@@ -1,12 +1,12 @@
 import React from 'react';
 import Expo from 'expo';
+import currentUser from '../Planner';
 import { 
     ScrollView,
     StyleSheet,
     Text,
     View,
     Button,
-    StatusBar,
     Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,12 +26,15 @@ export default class LoginScreen extends React.Component {
             });
 
             if (result.type === 'success') {
+                currentUser.setUser(result);
                 this.props.navigation.navigate("Main");//test
+                //console.log(currentUser.text)
                 return result.accessToken;
             } else {
                 return {cancelled: true};
             }
         } catch(e) {
+            console.log({error: true})
             return {error: true};
         }
     }

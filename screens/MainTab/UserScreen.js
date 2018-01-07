@@ -1,7 +1,9 @@
 import React from 'react';
+import currentUser from '../../Planner';
 import {
   Text,
 } from 'react-native';
+
 
 export default class UserScreen extends React.Component {
   static navigationOptions = {
@@ -10,7 +12,7 @@ export default class UserScreen extends React.Component {
 
   render() {
     return (
-      <Text>User's Profile</Text>
+      <Text>{currentUser.name}</Text>
     );
   }
 }
