@@ -3,13 +3,15 @@ class User{
         this._name = null;
         this._mail = null;
         this._avatar = null;
+        this._accessToken = null;
     }
     setUser(response){
         let userInfo = response.user;
-
         this._name = userInfo.givenName;
         this._mail = userInfo.email;
         this._avatar = userInfo.photoUrl;
+
+        this._accessToken = response.accessToken;
     }
 
     //getters
@@ -21,6 +23,9 @@ class User{
     }
     get avatar(){
         return this._avatar;
+    }
+    get accessToken(){
+        return this._accessToken;
     }
 
     //testing

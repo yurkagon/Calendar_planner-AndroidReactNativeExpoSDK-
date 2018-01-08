@@ -1,6 +1,7 @@
 import React from 'react';
 import Expo from 'expo';
 import currentUser from '../Planner';
+import GoogleAPI from '../constants/GoogleAPI';
 import { 
     ScrollView,
     StyleSheet,
@@ -11,24 +12,24 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const CLIENT_ID = "146220515786-1kv2u1ugl9cm5ciifoijegbl5e6k60gm.apps.googleusercontent.com";
-const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
+
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
 
+
     async signInWithGoogleAsync() {
         try {
             const result = await Expo.Google.logInAsync({
-                androidClientId: CLIENT_ID,
-                scopes: ['profile', 'email',CALENDAR_SCOPE],
+                androidClientId: GoogleAPI.CLIENT_ID,
+                scopes: ['profile', 'email',GoogleAPI.CALENDAR_SCOPE],
             });
 
             if (result.type === 'success') {
                 currentUser.setUser(result);
-                console.log(result);
+                //console.log(result);
                 this.props.navigation.navigate("Main");//test
                 return result.accessToken;
             } else {
