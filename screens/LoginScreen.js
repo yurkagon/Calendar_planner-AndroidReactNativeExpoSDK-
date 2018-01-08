@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-var clientId = "146220515786-1kv2u1ugl9cm5ciifoijegbl5e6k60gm.apps.googleusercontent.com";
+const CLIENT_ID = "146220515786-1kv2u1ugl9cm5ciifoijegbl5e6k60gm.apps.googleusercontent.com";
+const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
@@ -21,14 +22,14 @@ export default class LoginScreen extends React.Component {
     async signInWithGoogleAsync() {
         try {
             const result = await Expo.Google.logInAsync({
-                androidClientId: "146220515786-1kv2u1ugl9cm5ciifoijegbl5e6k60gm.apps.googleusercontent.com",
-                scopes: ['profile', 'email'],
+                androidClientId: CLIENT_ID,
+                scopes: ['profile', 'email',CALENDAR_SCOPE],
             });
 
             if (result.type === 'success') {
                 currentUser.setUser(result);
+                console.log(result);
                 this.props.navigation.navigate("Main");//test
-                //console.log(currentUser.text)
                 return result.accessToken;
             } else {
                 return {cancelled: true};
