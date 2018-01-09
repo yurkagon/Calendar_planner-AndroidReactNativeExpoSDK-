@@ -83,15 +83,26 @@ export default class EventsScreen extends React.Component {
          function howSoonSort(d1,d2){
             let a = new Date(d1.end.dateTime);
             let b = new Date(d2.end.dateTime);
+            let now = new Date();
 
+            //events are now on the top of list
+            if ( new Date(d1.end.dateTime) > now && new Date(d1.start.dateTime) < now){
+                return -1;
+            }
+            if ( new Date(d2.end.dateTime) > now && new Date(d2.start.dateTime) < now){
+                return 1;
+            }
+
+            //bad date in the bottom
             if(a.toString() == "Invalid Date" ) return 1;
             if(b.toString() == "Invalid Date" ) return -1;
 
-            let now = new Date();
+            //outdated in the bottom
             if(a < now) return 1;
             if(b < now) return -1;
-            return Math.abs(now - a) - Math.abs(now - b);
             
+            //how much closer to now
+            return Math.abs(now - a) - Math.abs(now - b);
         }
     };
     static navigationOptions = {
@@ -108,8 +119,13 @@ class Event extends React.Component{
         let end = formatDate(this.props.end);
         let text = formatText(this.props.text);
         //setting background if outdated
-        let bg = ( new Date(this.props.end) < new Date() ) ? Colors.tintColor : "#51d64a";
-        if(start == "No information" || end == "No information") bg = "#d15757";
+        let bg = ( new Date(this.props.end) < new Date() ) ? Colors.outdatedColor : Colors.inFutureColor;
+        //setting bg if event is now
+        if ( new Date(this.props.end) > new Date() && new Date(this.props.start) < new Date()){
+            bg = Colors.nowColor;
+        }
+        if(start == "No information" || end == "No information") bg = Colors.errorColor;
+
         return(
             <View style={[styles.event,{backgroundColor: bg}]}>   
                     <Text style={styles.eventText}>{text.toUpperCase()}</Text>
