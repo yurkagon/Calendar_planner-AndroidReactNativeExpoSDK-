@@ -66,13 +66,16 @@ class Event extends React.Component{
         let start = formatDate(this.props.start);
         let end = formatDate(this.props.end);
         let text = formatText(this.props.text);
+        //setting background if outdated
+        let bg = ( new Date(this.props.end) < new Date() ) ? Colors.tintColor : "#51d64a";
+        if(start == "No information" || end == "No information") bg = "#d15757";
         return(
-            <View style={styles.event}>
-                <Text style={styles.eventText}>{text}</Text>
-                <View>
-                    <Text style={styles.eventTime}>{start}</Text>
-                    <Text style={styles.eventTime}>{end}</Text>
-                </View>
+            <View style={[styles.event,{backgroundColor: bg}]}>   
+                    <Text style={styles.eventText}>{text}</Text>
+                    <View>
+                        <Text style={styles.eventTime}>{start}</Text>
+                        <Text style={styles.eventTime}>{end}</Text>
+                    </View>
             </View>
         );
 
@@ -90,7 +93,7 @@ class Event extends React.Component{
                 }
             }
             catch(e){
-                return "Cannot read";
+                return "No information";
             }
         }
         function formatText(str){
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
         paddingRight: 5,
     },
     event:{
-        backgroundColor: Colors.tintColor,
         marginTop: 2,
         marginBottom: 2,
         flexDirection: 'row',
