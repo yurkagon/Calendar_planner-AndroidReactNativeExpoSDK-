@@ -6,6 +6,7 @@ import {
     StyleSheet,
     FlatList,
 } from 'react-native';
+import Colors from '../../constants/Colors';
 
 export default class EventsScreen extends React.Component {
     constructor(props){
@@ -29,7 +30,6 @@ export default class EventsScreen extends React.Component {
         this.setState({
             events: items,
         })
-       // console.log(items[0])
     }
 
     render() {
@@ -45,7 +45,7 @@ export default class EventsScreen extends React.Component {
                 <View style={styles.page}>
                     <FlatList
                         data={this.state.events}
-                        renderItem={({item}) => <Text>{item.summary}</Text>}
+                        renderItem={({item}) => <Event text={item.summary} start={item.start.dateTime} end={item.end.dateTime}/>}
                         keyExtractor={(item, index) => index}
                     />
                 </View>
@@ -58,11 +58,40 @@ export default class EventsScreen extends React.Component {
     };
 }
 
-class Item extends React.Component{
+class Event extends React.Component{
+    constructor(props){
+        super(props);
+    }
     render(){
+        let start = formatDate(this.props.start);
+        let end = formatDate(this.props.end);
         return(
-{}
+            <View style={styles.event}>
+                <Text style={styles.eventText}>{this.props.text}</Text>
+                <View>
+                    <Text style={styles.eventTime}>{start}</Text>
+                    <Text style={styles.eventTime}>{end}</Text>
+                </View>
+            </View>
         );
+
+        function formatDate(str){
+            try{
+                if(!str){
+                    return "No information";
+                }
+                else{
+                    let date = str.split('T')[0].replace(/-/g, '/');
+                    let time = str.split('T')[1].slice(0,5);
+                    let result = date + ' in ' + time;
+        
+                    return result;
+                }
+            }
+            catch(e){
+                return "Cannot read";
+            }
+        }
     }
 }
 
@@ -73,5 +102,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingLeft: 5,
         paddingRight: 5,
+    },
+    event:{
+        backgroundColor: Colors.tintColor,
+        marginTop: 2,
+        marginBottom: 2,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 4,
+        paddingRight: 4,
+        borderRadius: 10,
+        height: 50.
+    },
+    eventText:{
+        color: 'white',
+        fontSize: 15,
+    },
+    eventTime:{
+        color: 'white'
     },
 });
