@@ -8,7 +8,7 @@ import {
     TextInput,
 } from 'react-native';
 import Colors from '../../constants/Colors';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class EventsScreen extends React.Component {
     constructor(props){
@@ -20,19 +20,29 @@ export default class EventsScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
-        this.getEventsListAsync(currentUser.accessToken);
 
+    componentDidMount(){
+        this.getEventsListAsync(currentUser.accessToken);
+        this.timer = setInterval(()=>{
+            this.getEventsListAsync(currentUser.accessToken);
+        },currentUser.autoUpdateTime);
+    }
+    componentWillUnmount(){
+        clearInterval(this.timer);
     }
 
     async getEventsListAsync(accessToken) {
-        let response = await fetch(' https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-            headers: { Authorization: `Bearer ${accessToken}`},
-        });
-        let items = JSON.parse(response._bodyText).items;
-        this.setState({
-            events: items,
-        })
+        try{
+            let response = await fetch(' https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+                headers: { Authorization: `Bearer ${accessToken}`},
+            });
+            let items = JSON.parse(response._bodyText).items;
+            this.setState({
+                events: items,
+            })
+        }catch(e){
+            //pop up
+        }
     }
 
     render() {
@@ -45,7 +55,13 @@ export default class EventsScreen extends React.Component {
         if(this.state.events.length == 0){
             return (
                 <View style={styles.page}>
-                    <Text>No events yet...</Text>
+                    <Text style={styles.noEventsText}>No events yet...</Text>
+                    <MaterialCommunityIcons
+                        name={'numeric-0-box-multiple-outline'}
+                        size={200}
+                        color={Colors.outdatedColor}
+                        style={styles.noEventsImage}
+                    />
                 </View>
             )
         } else{
@@ -206,4 +222,14 @@ const styles = StyleSheet.create({
     eventTime:{
         color: 'white'
     },
+    noEventsText:{
+        textAlign: 'center',
+        fontSize: 50,
+        marginTop: 35,
+        color: Colors.outdatedColor,
+    },
+    noEventsImage:{
+        alignSelf: 'center',
+        marginTop: 70,
+    }
 });

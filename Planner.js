@@ -4,6 +4,8 @@ class User{
         this._mail = null;
         this._avatar = null;
         this._accessToken = null;
+
+        this._autoUpdateTime = 15000;
     }
     setUser(response){
         let userInfo = response.user;
@@ -27,12 +29,8 @@ class User{
     get accessToken(){
         return this._accessToken;
     }
-
-    //testing
-    setTestUser(){
-        this._name = "Yuragon";
-        this._mail = "somemail@gmail.com";
-        this._avatar = "https://lh5.googleusercontent.com/-ahS24LsisJo/AAAAAAAAAAI/AAAAAAAAAM0/1HJ-cKquaIY/photo.jpg";
+    get autoUpdateTime(){
+        return this._autoUpdateTime;
     }
 }
 
