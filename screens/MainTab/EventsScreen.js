@@ -33,6 +33,8 @@ export default class EventsScreen extends React.Component {
     }
 
     render() {
+        let arr = this.state.events;
+        arr.sort(howSoonSort);  
         if(this.state.events.length == 0){
             return (
                 <View style={styles.page}>
@@ -40,18 +42,32 @@ export default class EventsScreen extends React.Component {
                 </View>
             )
         } else{
-            console.log(this.state.events)
             return(
                 <View style={styles.page}>
                     <FlatList
-                        data={this.state.events}
+                        data={arr}
                         renderItem={({item}) => <Event text={item.summary} start={item.start.dateTime} end={item.end.dateTime}/>}
                         keyExtractor={(item, index) => index}
                     />
                 </View>
             );
         }
-        
+        /*sorting by how is soon will be future events (at the current moment)
+         and past events in the bottom of list, 
+         without info and with erros also in the bottom*/
+         function howSoonSort(d1,d2){
+            let a = new Date(d1.start.dateTime);
+            let b = new Date(d2.start.dateTime);
+
+            if(a.toString() == "Invalid Date" ) return 1;
+            if(b.toString() == "Invalid Date" ) return -1;
+
+            let now = new Date();
+            if(a < now) return 1;
+            if(b < now) return -1;
+            return Math.abs(now - a) - Math.abs(now - b);
+            
+        }
     };
     static navigationOptions = {
         title: "Soon events"
@@ -71,7 +87,7 @@ class Event extends React.Component{
         if(start == "No information" || end == "No information") bg = "#d15757";
         return(
             <View style={[styles.event,{backgroundColor: bg}]}>   
-                    <Text style={styles.eventText}>{text}</Text>
+                    <Text style={styles.eventText}>{text.toUpperCase()}</Text>
                     <View>
                         <Text style={styles.eventTime}>{start}</Text>
                         <Text style={styles.eventTime}>{end}</Text>
@@ -97,7 +113,7 @@ class Event extends React.Component{
             }
         }
         function formatText(str){
-            let max = 23;
+            let max = 21;
             
             if(!str){
                 return "No information";
