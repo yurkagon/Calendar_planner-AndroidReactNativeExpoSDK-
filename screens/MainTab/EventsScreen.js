@@ -5,8 +5,10 @@ import {
     View,
     StyleSheet,
     FlatList,
+    TextInput,
 } from 'react-native';
 import Colors from '../../constants/Colors';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default class EventsScreen extends React.Component {
     constructor(props){
@@ -14,15 +16,16 @@ export default class EventsScreen extends React.Component {
 
         this.state = {
             events: [],
+            inputText: ''
         };
     }
 
     componentDidMount() {
-        this.getEventsList(currentUser.accessToken);
+        this.getEventsListAsync(currentUser.accessToken);
 
     }
 
-    async getEventsList(accessToken) {
+    async getEventsListAsync(accessToken) {
         let response = await fetch(' https://www.googleapis.com/calendar/v3/calendars/primary/events', {
             headers: { Authorization: `Bearer ${accessToken}`},
         });
@@ -34,7 +37,11 @@ export default class EventsScreen extends React.Component {
 
     render() {
         let arr = this.state.events;
-        arr.sort(howSoonSort);  
+        arr.sort(howSoonSort);
+        //filter by searching
+        let filteredArr = arr.filter( obj => {
+            return obj.summary.toUpperCase().includes(this.state.inputText.toUpperCase());
+        })
         if(this.state.events.length == 0){
             return (
                 <View style={styles.page}>
@@ -44,8 +51,26 @@ export default class EventsScreen extends React.Component {
         } else{
             return(
                 <View style={styles.page}>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.TextInput}
+                            onChangeText={(inputText) => this.setState({inputText})}
+                            value={this.state.inputText}
+                            maxLength = {40}
+                            multiline={false}
+                            autoCorrect={false}
+                            placeholder="Search..."
+                            selectionColor="#4680dd"
+                            underlineColorAndroid="#4680dd"
+                        />
+                        <MaterialIcons
+                            name={'search'}
+                            size={40}
+                            color="#4680dd"
+                        />
+                    </View>
                     <FlatList
-                        data={arr}
+                        data={filteredArr}
                         renderItem={({item}) => <Event text={item.summary} start={item.start.dateTime} end={item.end.dateTime}/>}
                         keyExtractor={(item, index) => index}
                     />
@@ -56,8 +81,8 @@ export default class EventsScreen extends React.Component {
          and past events in the bottom of list, 
          without info and with erros also in the bottom*/
          function howSoonSort(d1,d2){
-            let a = new Date(d1.start.dateTime);
-            let b = new Date(d2.start.dateTime);
+            let a = new Date(d1.end.dateTime);
+            let b = new Date(d2.end.dateTime);
 
             if(a.toString() == "Invalid Date" ) return 1;
             if(b.toString() == "Invalid Date" ) return -1;
@@ -133,6 +158,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingLeft: 5,
         paddingRight: 5,
+    },
+    inputContainer:{
+        height: 40,
+        marginTop: 10,
+        marginBottom: 3,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    TextInput:{
+        width: 310,
+        padding: 2,
+        color: "#4680dd"
     },
     event:{
         marginTop: 2,
