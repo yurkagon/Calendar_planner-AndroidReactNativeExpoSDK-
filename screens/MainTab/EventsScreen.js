@@ -65,9 +65,10 @@ class Event extends React.Component{
     render(){
         let start = formatDate(this.props.start);
         let end = formatDate(this.props.end);
+        let text = formatText(this.props.text);
         return(
             <View style={styles.event}>
-                <Text style={styles.eventText}>{this.props.text}</Text>
+                <Text style={styles.eventText}>{text}</Text>
                 <View>
                     <Text style={styles.eventTime}>{start}</Text>
                     <Text style={styles.eventTime}>{end}</Text>
@@ -90,6 +91,17 @@ class Event extends React.Component{
             }
             catch(e){
                 return "Cannot read";
+            }
+        }
+        function formatText(str){
+            let max = 23;
+            
+            if(!str){
+                return "No information";
+            }
+            else{
+                if(str.length > max) return str.substring(0,max-3) + "...";
+                else return str;
             }
         }
     }
