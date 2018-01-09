@@ -6,6 +6,8 @@ class User{
         this._accessToken = null;
 
         this._autoUpdateTime = 15000;
+
+        this._arrayOfEvents = [];
     }
     setUser(response){
         let userInfo = response.user;
@@ -31,6 +33,14 @@ class User{
     }
     get autoUpdateTime(){
         return this._autoUpdateTime;
+    }
+    get arrayOfEvents(){
+        return this._arrayOfEvents;
+    }
+
+    //setters
+    set arrayOfEvents(arr){
+        this._arrayOfEvents = arr;
     }
 }
 

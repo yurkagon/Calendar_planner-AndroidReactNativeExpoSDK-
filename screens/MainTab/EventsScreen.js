@@ -32,16 +32,24 @@ export default class EventsScreen extends React.Component {
     }
 
     async getEventsListAsync(accessToken) {
+        let response = {};
+        let error = false;
+        let items = [];
         try{
-            let response = await fetch(' https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+            response = await fetch(' https://www.googleapis.com/calendar/v3/calendars/primary/events', {
                 headers: { Authorization: `Bearer ${accessToken}`},
             });
-            let items = JSON.parse(response._bodyText).items;
-            this.setState({
-                events: items,
-            })
+            items = JSON.parse(response._bodyText).items;
+            if(!Array.isArray(items)) throw "error";
         }catch(e){
-            //pop up
+            error = true;
+        }finally {
+            if(!error){
+                currentUser.arrayOfEvents = items;
+                this.setState({
+                    events: items,
+                });
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import {
     View,
     Button,
     Image,
+    ToastAndroid
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,15 +30,13 @@ export default class LoginScreen extends React.Component {
 
             if (result.type === 'success') {
                 currentUser.setUser(result);
-                //console.log(result);
-                this.props.navigation.navigate("Main");//test
-                return result.accessToken;
+                this.props.navigation.navigate("Main");
+                ToastAndroid.show('Success', ToastAndroid.SHORT);
             } else {
-                return {cancelled: true};
+                ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
             }
         } catch(e) {
-            console.log({error: true})
-            return {error: true};
+            ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
         }
     }
 
