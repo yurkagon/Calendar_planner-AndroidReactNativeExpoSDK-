@@ -7,7 +7,8 @@ import {
     FlatList,
     TextInput,
     TouchableOpacity,
-    ToastAndroid
+    ToastAndroid,
+    TouchableHighlight,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import { MaterialIcons, MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
@@ -109,7 +110,14 @@ export default class EventsScreen extends React.Component {
                     </View>
                     <FlatList
                         data={filteredArr}
-                        renderItem={({item}) => <Event text={item.summary} start={item.start.dateTime} end={item.end.dateTime}/>}
+                        renderItem={({item}) => {
+                            return(
+                                <Event 
+                                    obj={item}
+                                    getOnCurrentEventScreen={this.getOnCurrentEventScreen.bind(this)}
+                                />
+                            );
+                        }}
                         keyExtractor={(item, index) => index}
                     />
                     <RefreshButton press={()=>{
@@ -122,6 +130,11 @@ export default class EventsScreen extends React.Component {
     static navigationOptions = {
         title: "Soon events"
     };
+
+    getOnCurrentEventScreen(id){
+        console.log(id)
+        this.props.navigation.navigate("CurrentEvent");
+    }
 }
 
 class Event extends React.Component{
@@ -129,25 +142,31 @@ class Event extends React.Component{
         super(props);
     }
     render(){
-        let start = currentUser.formatDateToDisplay(this.props.start);
-        let end = currentUser.formatDateToDisplay(this.props.end);
-        let text = currentUser.formatTextToDisplayByLimit(this.props.text);
+        let start = currentUser.formatDateToDisplay(this.props.obj.start.dateTime);
+        let end = currentUser.formatDateToDisplay(this.props.obj.end.dateTime);
+        let text = currentUser.formatTextToDisplayByLimit(this.props.obj.summary);
         //setting background if outdated
-        let bg = ( new Date(this.props.end) < new Date() ) ? Colors.outdatedColor : Colors.inFutureColor;
+        let bg = ( new Date(this.props.obj.end.dateTime) < new Date() ) ? Colors.outdatedColor : Colors.inFutureColor;
         //setting bg if event is now
-        if ( new Date(this.props.end) > new Date() && new Date(this.props.start) < new Date()){
+        if ( new Date(this.props.obj.end.dateTime) > new Date() && new Date(this.props.obj.start.dateTime) < new Date()){
             bg = Colors.nowColor;
         }
         if(start == "No information" || end == "No information") bg = Colors.errorColor;
 
-        return(
-            <View style={[styles.event,{backgroundColor: bg}]}>   
-                    <Text style={styles.eventText}>{text.toUpperCase()}</Text>
-                    <View>
-                        <Text style={styles.eventTime}>{start}</Text>
-                        <Text style={styles.eventTime}>{end}</Text>
-                    </View>
-            </View>
+        return( 
+            <TouchableOpacity 
+                style={[styles.event,{backgroundColor: bg}]}
+                activeOpacity={0.7}
+                onPress={()=>{
+                    this.props.getOnCurrentEventScreen(this.props.obj);
+                }}
+            >   
+                <Text style={styles.eventText}>{text.toUpperCase()}</Text>
+                <View>
+                    <Text style={styles.eventTime}>{start}</Text>
+                    <Text style={styles.eventTime}>{end}</Text>
+                </View>
+            </TouchableOpacity>
         );
 
     }
