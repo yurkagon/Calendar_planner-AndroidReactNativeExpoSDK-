@@ -72,6 +72,45 @@ class User{
             else return str;
         }
     }
+
+    sortDatesToDisplay(arr){
+        //d1.end.dateTime
+        let nowDate = new Date();
+
+        let past = arr.filter(it=>{
+            if(new Date(it.start.dateTime).toString() == "Invalid Date" ) return false;
+            return nowDate > (new Date(it.end.dateTime));
+        }).sort(this.sortDates);
+        let future = arr.filter(it=>{
+            if(new Date(it.start.dateTime).toString() == "Invalid Date" ) return false;
+            return nowDate < (new Date(it.start.dateTime));
+        }).sort(this.sortDatesReverse);
+        let now = arr.filter(it=>{
+            if(new Date(it.start.dateTime).toString() == "Invalid Date" ) return false;
+            return nowDate >= (new Date(it.start.dateTime)) && nowDate <= (new Date(it.end.dateTime));
+        }).sort(this.sortDatesReverse);
+        let noDate = arr.filter(it=>{
+            if(new Date(it.start.dateTime).toString() == "Invalid Date" ) return true;
+        });
+
+        return now.concat(future,past,noDate);
+    }
+    sortDatesReverse(d1,d2){
+        let a = new Date(d1.end.dateTime);
+        let b = new Date(d2.end.dateTime);
+        if(a.toString() == "Invalid Date" ) return 1;
+        if(b.toString() == "Invalid Date" ) return -1;
+
+        return a-b;
+    }
+    sortDates(d1,d2){
+        let a = new Date(d1.end.dateTime);
+        let b = new Date(d2.end.dateTime);
+
+        if(a.toString() == "Invalid Date" ) return 1;
+        if(b.toString() == "Invalid Date" ) return -1;
+        return b-a;
+    }
 }
 
 var currentUser = new User();

@@ -65,8 +65,8 @@ export default class EventsScreen extends React.Component {
     }
 
     render() {
-        let arr = this.state.events;
-        arr.sort(howSoonSort);
+        let arr = currentUser.sortDatesToDisplay(this.state.events);
+        
         //filter by searching
         let filteredArr = arr.filter( obj => {
             return obj.summary.toUpperCase().includes(this.state.inputText.toUpperCase());
@@ -117,33 +117,6 @@ export default class EventsScreen extends React.Component {
                     }}/>
                 </View>
             );
-        }
-        /*sorting by how is soon will be future events (at the current moment)
-         and past events in the bottom of list, 
-         without info and with erros also in the bottom*/
-         function howSoonSort(d1,d2){
-            let a = new Date(d1.end.dateTime);
-            let b = new Date(d2.end.dateTime);
-            let now = new Date();
-
-            //events are now on the top of list
-            if ( new Date(d1.end.dateTime) > now && new Date(d1.start.dateTime) < now){
-                return -1;
-            }
-            if ( new Date(d2.end.dateTime) > now && new Date(d2.start.dateTime) < now){
-                return 1;
-            }
-
-            //bad date in the bottom
-            if(a.toString() == "Invalid Date" ) return 1;
-            if(b.toString() == "Invalid Date" ) return -1;
-
-            //outdated in the bottom
-            if(a < now) return 1;
-            if(b < now) return -1;
-            
-            //how much closer to now
-            return Math.abs(now - a) - Math.abs(now - b);
         }
     };
     static navigationOptions = {
