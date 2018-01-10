@@ -40,7 +40,7 @@ class User{
 
     //setters
     set arrayOfEvents(arr){
-        this._arrayOfEvents = arr;
+        this._arrayOfEvents = arr.sort(this.sortDates);
     }
 
     //methods
@@ -100,16 +100,33 @@ class User{
         let b = new Date(d2.end.dateTime);
         if(a.toString() == "Invalid Date" ) return 1;
         if(b.toString() == "Invalid Date" ) return -1;
-
         return a-b;
     }
     sortDates(d1,d2){
         let a = new Date(d1.end.dateTime);
         let b = new Date(d2.end.dateTime);
-
         if(a.toString() == "Invalid Date" ) return 1;
         if(b.toString() == "Invalid Date" ) return -1;
         return b-a;
+    }
+
+    //d2 > d1 !!!!
+    formatTimeBetweenDates(d1,d2){
+        const MILLS_IN_DAY = 8.64e+7;
+        ms = d2.getTime() - d1.getTime();
+        if(ms < 0) return " error ";
+
+        let time = new Date(ms);
+        let days = Math.floor(ms/MILLS_IN_DAY);
+        let hours = time.getUTCHours();
+        let minutes = time.getUTCMinutes();
+        let seconds = time.getUTCSeconds();
+        
+        return (days||hours||minutes)?(
+                    (days ? days+(days>1?" days ":" day ") : "") +
+                    (hours ? hours+(hours>1?" hours ":" hour ") : "") + 
+                    (minutes ? minutes+(minutes>1?" minutes ":" minute ") : "")
+                ):(seconds ? seconds+(seconds>1?" seconds ":" second ") : " no time ");
     }
 }
 

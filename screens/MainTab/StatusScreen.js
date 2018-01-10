@@ -1,5 +1,6 @@
 import React from 'react';
 import currentUser from '../../Planner';
+import Colors from '../../constants/Colors';
 import {
     Text,
     View,
@@ -19,14 +20,38 @@ export default class StatusScreen extends React.Component {
             this.setState({
                 events: currentUser.arrayOfEvents,
             })
-        },5000);
+        },1000);
     }
     componentWillUnmount(){
         clearInterval(this.timer);
     }
 
     render() {
-        //getting events that start today => now
+        //getting index of event that is now
+        let nowIndex = this.state.events.findIndex(ev=>{
+            let startTime = new Date(ev.start.dateTime);
+            let endTime = new Date(ev.end.dateTime)
+            let nowDate = new Date();
+
+            if(startTime.toString() == "Invalid Date" || endTime.toString() == "Invalid Date") return false;
+
+            return nowDate >= startTime && nowDate <= endTime;
+        });
+        if(nowIndex != -1){
+            let event = this.state.events[nowIndex];
+            return(
+                <View style={[styles.page,{backgroundColor:Colors.nowColor}]}>
+                    <Text style={[styles.eventText,{fontSize: 30}]}>Now is:</Text>
+                    <Text style={[styles.eventText,{fontSize: 60}]}>
+                        {currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),25)}
+                    </Text>
+                    <Text style={[styles.eventText,{fontSize: 15}]}>
+                        {currentUser.formatTimeBetweenDates(new Date(),new Date(event.end.dateTime))}
+                        to end of the event.
+                    </Text>
+                </View>
+            );
+        }
  /*       let arr = this.state.events.filter(ev=>{
             let startTime = new Date(ev.start.dateTime);
             let now = new Date();
@@ -50,7 +75,7 @@ export default class StatusScreen extends React.Component {
             );
         } else return null;
         
-
+findIndex loaded
 */
 return null;
 
@@ -65,6 +90,12 @@ return null;
 const styles  = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: 'rgb(66, 134, 244)',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+    eventText:{
+        color: 'white',
+        textAlign: 'center',
+    }
 });
