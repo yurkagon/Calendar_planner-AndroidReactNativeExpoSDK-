@@ -40,7 +40,7 @@ class User{
 
     //setters
     set arrayOfEvents(arr){
-        this._arrayOfEvents = arr.sort(this.sortDates);
+        this._arrayOfEvents = arr.sort(this.sortDatesReverse);
     }
 
     //methods

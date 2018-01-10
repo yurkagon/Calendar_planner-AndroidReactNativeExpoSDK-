@@ -1,6 +1,7 @@
 import React from 'react';
 import currentUser from '../../Planner';
 import Colors from '../../constants/Colors';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {
     Text,
     View,
@@ -43,7 +44,7 @@ export default class StatusScreen extends React.Component {
                 <View style={[styles.page,{backgroundColor:Colors.nowColor}]}>
                     <Text style={[styles.eventText,{fontSize: 30}]}>Now is:</Text>
                     <Text style={[styles.eventText,{fontSize: 60}]}>
-                        {currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),25)}
+                        {currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),20)}
                     </Text>
                     <Text style={[styles.eventText,{fontSize: 15}]}>
                         {currentUser.formatTimeBetweenDates(new Date(),new Date(event.end.dateTime))}
@@ -52,34 +53,48 @@ export default class StatusScreen extends React.Component {
                 </View>
             );
         }
- /*       let arr = this.state.events.filter(ev=>{
+        //if no events now
+        let nextEventIndex = this.state.events.findIndex(ev=>{
             let startTime = new Date(ev.start.dateTime);
-            let now = new Date();
-            if(now.getFullYear() == startTime.getFullYear()
-                && now.getMonth() == startTime.getMonth()
-                && now.getDate() == startTime.getDate()
-            ){
-                return now <= startTime;
-            }
-            else return false;
+            let nowDate = new Date();
+
+            if(startTime.toString() == "Invalid Date") return false;            
+
+            return nowDate < startTime;
         });
-       for(let i = 0; i < arr.length; i++){
-           console.log(arr[i].start.dateTime)
-       }
+        let event = (nextEventIndex != -1) ? this.state.events[nextEventIndex] : null;
+        return(
+            <View style={[styles.page,{backgroundColor:Colors.outdatedColor}]}>
+                <Text style={[styles.eventText,{fontSize: 30}]}>No events {nextEventIndex!=-1?"now..":null}</Text>
+                <MaterialCommunityIcons
+                    name={nextEventIndex != -1?"calendar-clock":"calendar-remove"}
+                    size={100}
+                    color="white"
+                />
+                {nextEventIndex != -1 &&
+                    <View>
+                        <Text style={[styles.eventText,{fontSize: 30}]}>
+                            The next event is {currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),20)}.
+                        </Text>
+                        <Text style={[styles.eventText,{fontSize: 30}]}>
+                            It starts in the next 
+                        </Text>
+                        <Text style={[styles.eventText,{fontSize: 30}]}>
+                            {currentUser.formatTimeBetweenDates(new Date(),new Date(event.start.dateTime))}
+                        </Text>
+                    </View>   
+                }
+                
+            </View>
+        );
 
-        if(arr.length == 0){
-            return (
-                <View style={styles.page}>
-                    <Text>No events today..</Text>
-                </View>
-            );
-        } else return null;
-        
-findIndex loaded
-*/
-return null;
-
-     
+       // <Text style={[styles.eventText,{fontSize: 60}]}>
+        //{currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),25)}
+        //     </Text>
+        //<Text style={[styles.eventText,{fontSize: 15}]}>
+        //            {currentUser.formatTimeBetweenDates(new Date(),new Date(event.end.dateTime))}
+        //            to end of the event.
+        //        </Text>
     }
     static navigationOptions = {
         header: null,
