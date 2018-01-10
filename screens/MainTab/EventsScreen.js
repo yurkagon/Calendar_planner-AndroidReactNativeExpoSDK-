@@ -156,9 +156,9 @@ class Event extends React.Component{
         super(props);
     }
     render(){
-        let start = formatDate(this.props.start);
-        let end = formatDate(this.props.end);
-        let text = formatText(this.props.text);
+        let start = currentUser.formatDateToDisplay(this.props.start);
+        let end = currentUser.formatDateToDisplay(this.props.end);
+        let text = currentUser.formatTextToDisplayByLimit(this.props.text);
         //setting background if outdated
         let bg = ( new Date(this.props.end) < new Date() ) ? Colors.outdatedColor : Colors.inFutureColor;
         //setting bg if event is now
@@ -177,34 +177,6 @@ class Event extends React.Component{
             </View>
         );
 
-        function formatDate(str){
-            try{
-                if(!str){
-                    return "No information";
-                }
-                else{
-                    let date = str.split('T')[0].replace(/-/g, '/');
-                    let time = str.split('T')[1].slice(0,5);
-                    let result = date + ' in ' + time;
-        
-                    return result;
-                }
-            }
-            catch(e){
-                return "No information";
-            }
-        }
-        function formatText(str){
-            let max = 21;
-            
-            if(!str){
-                return "No information";
-            }
-            else{
-                if(str.length > max) return str.substring(0,max-3) + "...";
-                else return str;
-            }
-        }
     }
 }
 

@@ -42,6 +42,36 @@ class User{
     set arrayOfEvents(arr){
         this._arrayOfEvents = arr;
     }
+
+    //methods
+    formatDateToDisplay(str){
+        try{
+            if(!str){
+                return "No information";
+            }
+            else{
+                let date = str.split('T')[0].replace(/-/g, '/');
+                let time = str.split('T')[1].slice(0,5);
+                let result = date + ' in ' + time;
+    
+                return result;
+            }
+        }
+        catch(e){
+            return "No information";
+        }
+    }
+    formatTextToDisplayByLimit(str,limit){
+        let max = limit ? limit : 21;
+        
+        if(!str){
+            return "No information";
+        }
+        else{
+            if(str.length > max) return str.substring(0,max-3) + "...";
+            else return str;
+        }
+    }
 }
 
 var currentUser = new User();
