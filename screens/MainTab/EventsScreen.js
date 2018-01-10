@@ -6,9 +6,11 @@ import {
     StyleSheet,
     FlatList,
     TextInput,
+    TouchableOpacity,
+    ToastAndroid
 } from 'react-native';
 import Colors from '../../constants/Colors';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
 
 export default class EventsScreen extends React.Component {
     constructor(props){
@@ -41,11 +43,20 @@ export default class EventsScreen extends React.Component {
             });
             items = JSON.parse(response._bodyText).items;
             if(!Array.isArray(items)) throw "error";
+            //if no summury
+            items = items.map((item)=>{
+                if(typeof item.summary == "undefined"){
+                    item.summary = "No information";
+                    return item;
+                }
+                return item;
+            })
         }catch(e){
             error = true;
         }finally {
             if(!error){
                 currentUser.arrayOfEvents = items;
+                //ToastAndroid.show('WORKS!', ToastAndroid.SHORT)
                 this.setState({
                     events: items,
                 });
@@ -70,6 +81,9 @@ export default class EventsScreen extends React.Component {
                         color={Colors.outdatedColor}
                         style={styles.noEventsImage}
                     />
+                    <RefreshButton press={()=>{
+                        this.getEventsListAsync(currentUser.accessToken) 
+                    }}/>
                 </View>
             )
         } else{
@@ -98,6 +112,9 @@ export default class EventsScreen extends React.Component {
                         renderItem={({item}) => <Event text={item.summary} start={item.start.dateTime} end={item.end.dateTime}/>}
                         keyExtractor={(item, index) => index}
                     />
+                    <RefreshButton press={()=>{
+                        this.getEventsListAsync(currentUser.accessToken) 
+                    }}/>
                 </View>
             );
         }
@@ -191,6 +208,23 @@ class Event extends React.Component{
     }
 }
 
+class RefreshButton extends React.Component{
+    render(){
+        return(
+            <TouchableOpacity
+                style={styles.refreshButton}
+                onPress={()=>{this.props.press()}}
+                activeOpacity={0.5}
+            >
+                <Ionicons
+                    name={'md-refresh'}
+                    size={40}
+                    color="white"
+                />
+            </TouchableOpacity>
+        )
+    }
+}
 
 const styles = StyleSheet.create({
     page: {
@@ -239,5 +273,22 @@ const styles = StyleSheet.create({
     noEventsImage:{
         alignSelf: 'center',
         marginTop: 70,
+    },
+    refreshButton:{
+        width: 60,
+        height: 60,
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        backgroundColor: Colors.outdatedColor,
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 6,
     }
 });
