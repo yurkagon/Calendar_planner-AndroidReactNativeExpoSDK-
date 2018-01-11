@@ -37,6 +37,24 @@ export default class CurrentEventScreen extends React.Component {
                         <InfoField name="End time">{currentUser.formatDateToDisplay(obj.end.dateTime)}</InfoField>
                         <InfoField name="Creating date">{currentUser.formatDateToDisplay(obj.created)}</InfoField>
                         <InfoField name="Unique identificator">{obj.id}</InfoField>
+                        {objectType.text == "error" &&
+                            <InfoField name="Status">No information</InfoField>
+                        }
+                        {objectType.text == "past" &&
+                            <InfoField name="Status">
+                                This event has ended {currentUser.formatTimeBetweenDates(new Date(obj.end.dateTime),new Date())}ago
+                            </InfoField>
+                        }
+                        {objectType.text == "now" &&
+                            <InfoField name="Status">
+                                Is now. Ends in the next {currentUser.formatTimeBetweenDates(new Date(),new Date(obj.end.dateTime))}
+                            </InfoField>
+                        }
+                        {objectType.text == "future" &&
+                            <InfoField name="Status">
+                                It starts in the next {currentUser.formatTimeBetweenDates(new Date(),new Date(obj.start.dateTime))}
+                            </InfoField>
+                        }
                     </View>
                 </View>
                 <Hr/>
