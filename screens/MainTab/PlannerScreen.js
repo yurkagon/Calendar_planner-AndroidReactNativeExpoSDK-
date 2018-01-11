@@ -73,7 +73,6 @@ export default class EventsScreen extends React.Component {
         date.setHours(time.hour);
         date.setMinutes(time.minute);
         date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
-        
         let startTime = new Date(date);
         this.setState({startTime});
     }
@@ -135,19 +134,30 @@ export default class EventsScreen extends React.Component {
                             {currentUser.formatDateToDisplay(this.state.endTime.toJSON())}
                         </Text>
                     </TouchableOpacity>
+                    {this.state.startTime < this.state.endTime && 
+                        <Text style={styles.resultText}>
+                            The event will be comming for {currentUser.formatTimeBetweenDates(this.state.startTime,this.state.endTime)}
+                        </Text>
+                    }
+                    {this.state.startTime > this.state.endTime && 
+                        <Text style={styles.resultText}>
+                            Please, enter correct dates
+                        </Text>
+                    }
                 </Field>
-                <TouchableOpacity
+                {this.state.startTime < this.state.endTime && this.state.inputText.length > 0 &&
+                    <TouchableOpacity
                         style={{marginTop:40}}
                         activeOpacity={0.7}
                         //onPress={()=> {}}
-                >
-                    <MaterialIcons
-                        name="add-box"
-                        size={100}
-                        color="white"
-                    />
-                </TouchableOpacity>
-
+                    >
+                        <MaterialIcons
+                            name="add-box"
+                            size={100}
+                            color="white"
+                        />
+                    </TouchableOpacity>
+                }
             </View>
         );
     }
@@ -207,6 +217,10 @@ const styles = StyleSheet.create({
         color: Colors.nowColor,
         fontSize: 32,
         textAlign: "center",
-    }
+    },
+    resultText:{
+        color: 'white',
+        fontSize:15,
 
+    }
 });
