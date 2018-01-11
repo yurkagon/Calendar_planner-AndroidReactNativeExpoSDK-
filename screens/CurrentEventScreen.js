@@ -85,8 +85,8 @@ export default class CurrentEventScreen extends React.Component {
 class InfoField extends React.Component {
     render() {
         return (
-            <View style={ {flexDirection: 'column'}}>
-                <Text style={{color:'grey'}}>{this.props.name}: </Text>
+            <View style={ {flexDirection: 'column',width: 225}}>
+                <Text style={{color:'grey',}}>{this.props.name}: </Text>
                 <Text>{this.props.children}</Text>
             </View>
         );
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 25,
+        padding: 20,
     },
     container:{
         flexDirection: 'row',
