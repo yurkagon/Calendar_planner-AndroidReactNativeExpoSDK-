@@ -7,6 +7,7 @@ import {
     TextInput,
     TouchableOpacity,
     DatePickerAndroid,
+    TimePickerAndroid,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -42,29 +43,51 @@ export default class EventsScreen extends React.Component {
             else{
                 date = new Date();
             }
-          } catch ({code, message}) {
-                date = new Date()
+          } catch (e) {
+                date = new Date();
           }
         return date;
     }
+    async setTimeAsync(){
+        let time = {};
+        let now = new Date();
+        try {
+            const {action, hour, minute} = await TimePickerAndroid.open({
+              hour: now.getHours(),
+              minute: now.getMinutes(),
+              is24Hour: true, 
+            });
+            if (action !== TimePickerAndroid.dismissedAction) {
+                time = {hour,minute};
+            }else{
+                time = {hour:0,minute:0}
+            }
+          } catch (e) {
+            time = {hour:0,minute:0};
+          }
+        return time;
+    }
     async setStartTimeAsync(){
-        startTime = await this.setDateAsync();
+        let date = await this.setDateAsync();
+        let time = await this.setTimeAsync();
+        date.setHours(time.hour);
+        date.setMinutes(time.minute);
+        date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+        
+        let startTime = new Date(date);
         this.setState({startTime});
     }
     async setEndTimeAsync(){
-        endTime = await this.setDateAsync();
+        let date = await this.setDateAsync();
+        let time = await this.setTimeAsync();
+        date.setHours(time.hour);
+        date.setMinutes(time.minute);
+        date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+        
+        let endTime = new Date(date);
         this.setState({endTime});
     }
-    setBaseDates(){
-        let startTime = new Date();
-        let endTime = new Date(startTime);
-        endTime.setHours(endTime.getHours()+1);
-
-        this.setState({
-            startTime,
-            endTime,
-        });
-    }
+    
     render() {
         return (
             <View style={styles.page}>
@@ -127,6 +150,16 @@ export default class EventsScreen extends React.Component {
 
             </View>
         );
+    }
+    setBaseDates(){
+        let startTime = new Date();
+        let endTime = new Date(startTime);
+        endTime.setHours(endTime.getHours()+1);
+
+        this.setState({
+            startTime,
+            endTime,
+        });
     }
 }
 
