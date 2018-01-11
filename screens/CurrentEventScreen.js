@@ -3,15 +3,14 @@ import Expo from 'expo';
 import currentUser from '../Planner';
 import GoogleAPI from '../constants/GoogleAPI';
 import { 
-    ScrollView,
     StyleSheet,
     Text,
     View,
-    Button,
-    Image,
-    ToastAndroid
+    ToastAndroid,
+    TouchableOpacity,
+    Linking,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons,Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 
@@ -57,7 +56,29 @@ export default class CurrentEventScreen extends React.Component {
                         }
                     </View>
                 </View>
-                <Hr/>
+                <TouchableOpacity 
+                    style={[styles.button,{backgroundColor: Colors.outdatedColor}]}
+                    activeOpacity={0.7}
+                >   
+                    <Text style={{color:'white',fontSize:20}}>Open in browser</Text>
+                    <Ionicons
+                        name="logo-chrome"
+                        size={40}
+                        color="white"
+                        onPress={()=> Linking.openURL(obj.htmlLink)}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.button,{backgroundColor: Colors.errorColor}]}
+                    activeOpacity={0.7}
+                >   
+                    <Text style={{color:'white',fontSize:20}}>Remove this event</Text>
+                    <MaterialIcons
+                        name="delete"
+                        size={40}
+                        color="white"
+                    />
+                </TouchableOpacity>
             </View>
         );
         function setObjectType(ev){
@@ -92,28 +113,27 @@ class InfoField extends React.Component {
         );
     }
 }
-class Hr extends React.Component{
-    render(){
-        return (
-            <View style={{
-                    marginTop: 15,
-                    marginBottom: 15,
-                    marginLeft: 5,
-                    marginRight: 5,
-                    borderBottomColor: 'grey',
-                    borderBottomWidth: 1,
-                }
-            }/>
-        )
-    }
-}
+
 const styles = StyleSheet.create({
     page: {
         flex: 1,
         backgroundColor: '#fff',
         padding: 20,
+        alignItems: 'center',
+       // justifyContent: 'space-between',
     },
     container:{
         flexDirection: 'row',
+        marginBottom: 30,
+    },
+    button:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+        width: 250,
+        borderRadius: 15,
+        height: 50,
     },
 });
