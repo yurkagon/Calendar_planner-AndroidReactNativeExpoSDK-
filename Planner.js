@@ -1,3 +1,5 @@
+import EventsScreen from "./screens/MainTab/EventsScreen";
+
 class User{
     constructor(){
         this._name = null;
@@ -8,7 +10,18 @@ class User{
         this._autoUpdateTime = 15000;
 
         this._arrayOfEvents = [];
+
+        this._autoUpdator = null;
     }
+    //test
+    setAutoUpdator(method){
+        this_.autoUpdator = method;
+    }
+    Update(){
+        this_.autoUpdator();
+    }
+
+
     setUser(response){
         let userInfo = response.user;
         this._name = userInfo.givenName;
@@ -37,6 +50,7 @@ class User{
     get arrayOfEvents(){
         return this._arrayOfEvents;
     }
+
 
     //setters
     set arrayOfEvents(arr){

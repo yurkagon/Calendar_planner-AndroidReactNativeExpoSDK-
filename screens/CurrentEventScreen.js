@@ -19,6 +19,31 @@ export default class CurrentEventScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: currentUser.formatTextToDisplayByLimit(navigation.state.params.obj.summary.toUpperCase(),20),
     });
+
+    async removeEventAsync(){
+        const ID = this.props.navigation.state.params.obj.id;
+        const TITLE = currentUser.formatTextToDisplayByLimit(this.props.navigation.state.params.obj.summary,15);
+        let error = false;
+       
+        try{
+            let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/' + ID,{
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${currentUser.accessToken}`},
+            });
+            if(response.ok != true){
+                throw 'error';
+            }
+        }catch(e){
+            error = true;
+            ToastAndroid.show('Failed to remove the event', ToastAndroid.SHORT);
+        }finally{
+            if(!error){
+                ToastAndroid.show(TITLE + " is removed", ToastAndroid.SHORT);
+                //currentUser.update();
+                this.props.navigation.goBack();
+            }
+        }
+    }
     render() {
         let obj = this.props.navigation.state.params.obj;
         let objectType = setObjectType(obj);
@@ -59,18 +84,19 @@ export default class CurrentEventScreen extends React.Component {
                 <TouchableOpacity 
                     style={[styles.button,{backgroundColor: Colors.outdatedColor}]}
                     activeOpacity={0.7}
+                    onPress={()=> Linking.openURL(obj.htmlLink)}
                 >   
                     <Text style={{color:'white',fontSize:20}}>Open in browser</Text>
                     <Ionicons
                         name="logo-chrome"
                         size={40}
                         color="white"
-                        onPress={()=> Linking.openURL(obj.htmlLink)}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.button,{backgroundColor: Colors.errorColor}]}
                     activeOpacity={0.7}
+                    onPress={this.removeEventAsync.bind(this)}
                 >   
                     <Text style={{color:'white',fontSize:20}}>Remove this event</Text>
                     <MaterialIcons
