@@ -94,15 +94,15 @@ export default class EventsScreen extends React.Component {
                 <View style={styles.page}>
                     <View style={styles.inputContainer}>
                         <TextInput
-                            style={styles.TextInput}
-                            onChangeText={(inputText) => this.setState({inputText})}
-                            value={this.state.inputText}
-                            maxLength = {40}
-                            multiline={false}
-                            autoCorrect={false}
-                            placeholder="Search..."
-                            selectionColor="#4680dd"
-                            underlineColorAndroid="#4680dd"
+                             style={styles.TextInput}
+                             onChangeText={(inputText) => this.setState({inputText})}
+                             value={this.state.inputText}
+                             maxLength = {40}
+                             multiline={false}
+                             autoCorrect={false}
+                             placeholder="Search..."
+                             selectionColor="#4680dd"
+                             underlineColorAndroid="#4680dd"
                         />
                         <MaterialIcons
                             name={'search'}
