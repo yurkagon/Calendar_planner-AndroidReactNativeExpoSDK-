@@ -14,16 +14,6 @@ import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
 
 
-var test = {
-    "start": {
-      "dateTime": "2015-05-28T09:00:00-07:00"
-    },
-    "end": {
-      "dateTime": "2017-05-28T17:00:00-07:00"
-    },
-    "summary": "Tjest"
-  }
-
 
 export default class EventsScreen extends React.Component {
     static navigationOptions = {
@@ -85,7 +75,7 @@ export default class EventsScreen extends React.Component {
         let time = await this.setTimeAsync();
         date.setHours(time.hour);
         date.setMinutes(time.minute);
-        date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+       // date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
         let startTime = new Date(date);
         this.setState({startTime});
     }
@@ -94,7 +84,7 @@ export default class EventsScreen extends React.Component {
         let time = await this.setTimeAsync();
         date.setHours(time.hour);
         date.setMinutes(time.minute);
-        date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+      //  date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
         
         let endTime = new Date(date);
         this.setState({endTime});
@@ -113,12 +103,12 @@ export default class EventsScreen extends React.Component {
                 },
                 body: JSON.stringify({
                     "start": {
-                      "dateTime": "2015-05-28T09:00:00-07:00"
+                      "dateTime": this.state.startTime.toJSON()
                     },
                     "end": {
-                      "dateTime": "2017-05-28T17:00:00-07:00"
+                      "dateTime": this.state.endTime.toJSON()
                     },
-                    "summary": "Tjest"
+                    "summary": this.state.inputText
                   })
             });
             console.log(response)
@@ -136,6 +126,11 @@ export default class EventsScreen extends React.Component {
         }
     }
     render() {
+        let start = new Date(this.state.startTime);
+        let end = new Date(this.state.endTime);
+        start.setHours(start.getHours() - start.getTimezoneOffset() / 60);
+        end.setHours(end.getHours() - end.getTimezoneOffset() / 60);
+
         return (
             <View style={styles.page}>
                 <MaterialIcons
@@ -168,7 +163,7 @@ export default class EventsScreen extends React.Component {
                         onPress={this.setStartTimeAsync.bind(this)}
                     >
                         <Text style={styles.date}>
-                            {currentUser.formatDateToDisplay(this.state.startTime.toJSON())}
+                            {currentUser.formatDateToDisplay(start.toJSON())}
                         </Text>
                     </TouchableOpacity>
                 </Field>
@@ -179,21 +174,21 @@ export default class EventsScreen extends React.Component {
                         onPress={this.setEndTimeAsync.bind(this)}
                     >
                         <Text style={styles.date}>
-                            {currentUser.formatDateToDisplay(this.state.endTime.toJSON())}
+                            {currentUser.formatDateToDisplay(end.toJSON())}
                         </Text>
                     </TouchableOpacity>
-                    {this.state.startTime < this.state.endTime && 
+                    {start < end && 
                         <Text style={styles.resultText}>
                             The event will be comming for {currentUser.formatTimeBetweenDates(this.state.startTime,this.state.endTime)}
                         </Text>
                     }
-                    {this.state.startTime > this.state.endTime && 
+                    {start > end && 
                         <Text style={styles.resultText}>
                             Please, enter correct dates
                         </Text>
                     }
                 </Field>
-                {//this.state.startTime < this.state.endTime && this.state.inputText.length > 0 &&
+                {start < end && this.state.inputText.length > 0 &&
                     <TouchableOpacity
                         style={{marginTop:40}}
                         activeOpacity={0.7}

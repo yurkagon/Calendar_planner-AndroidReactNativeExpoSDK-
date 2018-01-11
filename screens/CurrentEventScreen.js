@@ -47,6 +47,8 @@ export default class CurrentEventScreen extends React.Component {
     render() {
         let obj = this.props.navigation.state.params.obj;
         let objectType = setObjectType(obj);
+        let createdTime = new Date(obj.created);
+        createdTime.setHours(createdTime.getHours() - createdTime.getTimezoneOffset() / 60);
         return (
             <View style={styles.page}>
                 <View style={styles.container}>
@@ -59,7 +61,7 @@ export default class CurrentEventScreen extends React.Component {
                         <InfoField name="Title">{obj.summary}</InfoField>
                         <InfoField name="Start time">{currentUser.formatDateToDisplay(obj.start.dateTime)}</InfoField>
                         <InfoField name="End time">{currentUser.formatDateToDisplay(obj.end.dateTime)}</InfoField>
-                        <InfoField name="Creating date">{currentUser.formatDateToDisplay(obj.created)}</InfoField>
+                        <InfoField name="Creating date">{currentUser.formatDateToDisplay(createdTime.toISOString())}</InfoField>
                         <InfoField name="Unique identificator">{obj.id}</InfoField>
                         {objectType.text == "error" &&
                             <InfoField name="Status">No information</InfoField>
