@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     DatePickerAndroid,
     TimePickerAndroid,
+    ToastAndroid,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -87,6 +88,38 @@ export default class EventsScreen extends React.Component {
         this.setState({endTime});
     }
     
+    async MakeEventAsync(){
+        let error = false;
+       
+        try{
+            let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
+                method: 'POST',
+                headers: { Authorization: `Bearer ${currentUser.accessToken}`},
+                body: JSON.stringify({
+                    "summary": this.state.inputText,
+                    "location": "Somewhere",
+                    "start": {
+                      "dateTime": this.state.startTime.toJSON()
+                    },
+                    "end": {
+                      "dateTime": this.state.endTime.toJSON()
+                    }
+                }),
+            });
+            console.log(response)
+            if(response.ok != true){
+                throw 'error';
+            }
+        }catch(e){
+            error = true;
+            ToastAndroid.show('Failed to make the event', ToastAndroid.SHORT);
+        }finally{
+            if(!error){
+                ToastAndroid.show("Event is created", ToastAndroid.SHORT);
+                currentUser.Update();
+            }
+        }
+    }
     render() {
         return (
             <View style={styles.page}>
@@ -149,7 +182,7 @@ export default class EventsScreen extends React.Component {
                     <TouchableOpacity
                         style={{marginTop:40}}
                         activeOpacity={0.7}
-                        //onPress={()=> {}}
+                        onPress={this.MakeEventAsync.bind(this)}
                     >
                         <MaterialIcons
                             name="add-box"
