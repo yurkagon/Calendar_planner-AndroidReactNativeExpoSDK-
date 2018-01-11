@@ -87,14 +87,6 @@ export default class StatusScreen extends React.Component {
                 
             </View>
         );
-
-       // <Text style={[styles.eventText,{fontSize: 60}]}>
-        //{currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),25)}
-        //     </Text>
-        //<Text style={[styles.eventText,{fontSize: 15}]}>
-        //            {currentUser.formatTimeBetweenDates(new Date(),new Date(event.end.dateTime))}
-        //            to end of the event.
-        //        </Text>
     }
     static navigationOptions = {
         header: null,
