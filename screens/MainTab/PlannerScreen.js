@@ -13,6 +13,18 @@ import {
 import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
 
+
+var test = {
+    "start": {
+      "dateTime": "2015-05-28T09:00:00-07:00"
+    },
+    "end": {
+      "dateTime": "2017-05-28T17:00:00-07:00"
+    },
+    "summary": "Tjest"
+  }
+
+
 export default class EventsScreen extends React.Component {
     static navigationOptions = {
         title: "Planner"
@@ -90,21 +102,24 @@ export default class EventsScreen extends React.Component {
     
     async MakeEventAsync(){
         let error = false;
-       
+       // this.state.startTime.toJSON();
+        //this.state.startTime.toISOString();
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
                 method: 'POST',
-                headers: { Authorization: `Bearer ${currentUser.accessToken}`},
+                headers: { 
+                    Authorization: `Bearer ${currentUser.accessToken}`,
+                    "Content-Type": "application/json" 
+                },
                 body: JSON.stringify({
-                    "summary": this.state.inputText,
-                    "location": "Somewhere",
                     "start": {
-                      "dateTime": this.state.startTime.toJSON()
+                      "dateTime": "2015-05-28T09:00:00-07:00"
                     },
                     "end": {
-                      "dateTime": this.state.endTime.toJSON()
-                    }
-                }),
+                      "dateTime": "2017-05-28T17:00:00-07:00"
+                    },
+                    "summary": "Tjest"
+                  })
             });
             console.log(response)
             if(response.ok != true){
@@ -178,7 +193,7 @@ export default class EventsScreen extends React.Component {
                         </Text>
                     }
                 </Field>
-                {this.state.startTime < this.state.endTime && this.state.inputText.length > 0 &&
+                {//this.state.startTime < this.state.endTime && this.state.inputText.length > 0 &&
                     <TouchableOpacity
                         style={{marginTop:40}}
                         activeOpacity={0.7}
