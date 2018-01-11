@@ -39,7 +39,7 @@ export default class CurrentEventScreen extends React.Component {
         }finally{
             if(!error){
                 ToastAndroid.show(TITLE + " is removed", ToastAndroid.SHORT);
-                //currentUser.update();
+                currentUser.Update();
                 this.props.navigation.goBack();
             }
         }

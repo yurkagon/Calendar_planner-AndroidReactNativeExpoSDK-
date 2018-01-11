@@ -11,14 +11,13 @@ class User{
 
         this._arrayOfEvents = [];
 
-        this._autoUpdator = null;
+        this._updator = null;
     }
-    //test
-    setAutoUpdator(method){
-        this_.autoUpdator = method;
+    setUpdator(method){
+        this._updator = method;
     }
     Update(){
-        this_.autoUpdator();
+        this._updator();
     }
 
 

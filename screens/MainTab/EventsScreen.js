@@ -25,16 +25,18 @@ export default class EventsScreen extends React.Component {
 
 
     componentDidMount(){
-        this.getEventsListAsync(currentUser.accessToken);
+        currentUser.setUpdator(this.getEventsListAsync.bind(this));
+        this.getEventsListAsync();
         this.timer = setInterval(()=>{
-            this.getEventsListAsync(currentUser.accessToken);
+            this.getEventsListAsync();
         },currentUser.autoUpdateTime);
     }
     componentWillUnmount(){
         clearInterval(this.timer);
     }
 
-    async getEventsListAsync(accessToken) {
+    async getEventsListAsync() {
+        const accessToken = currentUser.accessToken;
         let response = {};
         let error = false;
         let items = [];
