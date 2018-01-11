@@ -131,9 +131,8 @@ export default class EventsScreen extends React.Component {
         title: "Soon events"
     };
 
-    getOnCurrentEventScreen(id){
-        console.log(id)
-        this.props.navigation.navigate("CurrentEvent");
+    getOnCurrentEventScreen(obj){
+        this.props.navigation.navigate("CurrentEvent",{obj});
     }
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Expo from 'expo';
+
 import currentUser from '../Planner';
 import GoogleAPI from '../constants/GoogleAPI';
 import { 
@@ -16,16 +17,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default class CurrentEventScreen extends React.Component {
-    static navigationOptions = {
-        header: null,
-    };
-
-
-   
-
+    static navigationOptions = ({ navigation }) => ({
+        title: currentUser.formatTextToDisplayByLimit(navigation.state.params.obj.summary.toUpperCase(),20),
+    });
     render() {
         return (
-            <Text>WORKS!</Text>
+            <Text>{this.props.navigation.state.params.obj.summary}</Text>
         );
     }
 

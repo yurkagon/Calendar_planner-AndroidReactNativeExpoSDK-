@@ -8,7 +8,6 @@ class User{
         this._autoUpdateTime = 15000;
 
         this._arrayOfEvents = [];
-
     }
     setUser(response){
         let userInfo = response.user;
