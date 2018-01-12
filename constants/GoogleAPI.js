@@ -9,7 +9,6 @@ const API_KEY = "AIzaSyAeAINtF3LSD2yrH8Rt4uglI-kkPjPTGjQ";
 export default {
    CLIENT_ID,
    CALENDAR_SCOPE,
-   API_KEY,
    CLIENT_ID_STANDALONE,
    WEB_ID_STANDALONE,
 };

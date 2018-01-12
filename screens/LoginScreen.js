@@ -21,6 +21,7 @@ export default class LoginScreen extends React.Component {
     async signInWithGoogleAsync() {
         try {
             const result = await Expo.Google.logInAsync({
+                behavior:"web",
                 androidClientId: GoogleAPI.CLIENT_ID,
                 androidStandaloneAppClientId: GoogleAPI.CLIENT_ID_STANDALONE,
                 webClientId: GoogleAPI.WEB_ID_STANDALONE,
@@ -28,11 +29,12 @@ export default class LoginScreen extends React.Component {
             });
             if (result.type === 'success') {
                 currentUser.setUser(result);
+                ToastAndroid.show(result.accessToken, ToastAndroid.LONG);
                 this.props.navigation.navigate("Main");
                 ToastAndroid.show('Success', ToastAndroid.SHORT);
             } else {
-                ToastAndroid.show(result.type, ToastAndroid.LONG);
-                ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
+                ToastAndroid.show(result.accessToken, ToastAndroid.LONG);
+                //ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
             }
         } catch(e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG)
