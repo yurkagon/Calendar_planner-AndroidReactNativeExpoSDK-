@@ -21,7 +21,7 @@ export default class LoginScreen extends React.Component {
     async signInWithGoogleAsync() {
         try {
             const result = await Expo.Google.logInAsync({
-                androidClientId: "146220515786-qk6i73e3u7fb854sr2v0oapbso7ve4on.apps.googleusercontent.com",
+                androidStandaloneAppClientId: "146220515786-qk6i73e3u7fb854sr2v0oapbso7ve4on.apps.googleusercontent.com",
                 scopes: ['profile', 'email',"https://www.googleapis.com/auth/calendar"],
             });
             if (result.type === 'success') {
