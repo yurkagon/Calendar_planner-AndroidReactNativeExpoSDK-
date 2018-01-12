@@ -13,13 +13,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-
-
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
-
 
     async signInWithGoogleAsync() {
         try {
@@ -27,7 +24,6 @@ export default class LoginScreen extends React.Component {
                 androidClientId: GoogleAPI.CLIENT_ID,
                 scopes: ['profile', 'email',GoogleAPI.CALENDAR_SCOPE],
             });
-
             if (result.type === 'success') {
                 currentUser.setUser(result);
                 this.props.navigation.navigate("Main");
@@ -60,6 +56,7 @@ export default class LoginScreen extends React.Component {
                         </Text>
                         <View style={styles.loginButton}>
                             <Button
+                                style={{borderRadius:30}}
                                 title="Google Sign In"
                                 onPress={this.signInWithGoogleAsync.bind(this)}        
                             />
@@ -69,8 +66,6 @@ export default class LoginScreen extends React.Component {
             </ScrollView>
         );
     }
-
-
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,3 @@
-import EventsScreen from "./screens/MainTab/EventsScreen";
-
 class User{
     constructor(){
         this._name = null;
@@ -87,7 +85,6 @@ class User{
     }
 
     sortDatesToDisplay(arr){
-        //d1.end.dateTime
         let nowDate = new Date();
 
         let past = arr.filter(it=>{

@@ -13,8 +13,6 @@ import {
 import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
 
-
-
 export default class EventsScreen extends React.Component {
     static navigationOptions = {
         title: "Planner"
@@ -37,8 +35,6 @@ export default class EventsScreen extends React.Component {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
                 date: new Date(),
-                 // May 25 2020. Month 0 is January.
-                //date: new Date(2020, 4, 25)
             });
             if (action !== DatePickerAndroid.dismissedAction) {
                 date = new Date(year,month,day)
@@ -75,7 +71,6 @@ export default class EventsScreen extends React.Component {
         let time = await this.setTimeAsync();
         date.setHours(time.hour);
         date.setMinutes(time.minute);
-       // date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
         let startTime = new Date(date);
         this.setState({startTime});
     }
@@ -84,16 +79,13 @@ export default class EventsScreen extends React.Component {
         let time = await this.setTimeAsync();
         date.setHours(time.hour);
         date.setMinutes(time.minute);
-      //  date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
-        
+
         let endTime = new Date(date);
         this.setState({endTime});
     }
     
     async MakeEventAsync(){
         let error = false;
-       // this.state.startTime.toJSON();
-        //this.state.startTime.toISOString();
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
                 method: 'POST',
@@ -109,7 +101,7 @@ export default class EventsScreen extends React.Component {
                       "dateTime": this.state.endTime.toJSON()
                     },
                     "summary": this.state.inputText
-                  })
+                })
             });
             console.log(response)
             if(response.ok != true){
@@ -226,14 +218,12 @@ class Field extends React.Component {
         );
     }
 }
-
 const styles = StyleSheet.create({
     page: {
         flex: 1,
         backgroundColor: Colors.nowColor,
         padding: 20,
         alignItems: 'center',
-       // justifyContent: 'space-between',
     },
     TitleInput:{
         flexDirection: 'column',
@@ -264,6 +254,5 @@ const styles = StyleSheet.create({
     resultText:{
         color: 'white',
         fontSize:15,
-
     }
 });

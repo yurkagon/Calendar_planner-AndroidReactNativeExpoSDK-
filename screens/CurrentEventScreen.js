@@ -13,8 +13,6 @@ import {
 import { MaterialIcons,Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
-
-
 export default class CurrentEventScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: currentUser.formatTextToDisplayByLimit(navigation.state.params.obj.summary.toUpperCase(),20),
@@ -148,7 +146,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 20,
         alignItems: 'center',
-       // justifyContent: 'space-between',
     },
     container:{
         flexDirection: 'row',
