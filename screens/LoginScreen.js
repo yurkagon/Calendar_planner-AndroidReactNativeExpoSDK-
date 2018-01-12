@@ -24,16 +24,18 @@ export default class LoginScreen extends React.Component {
                 androidClientId: GoogleAPI.CLIENT_ID,
                 androidStandaloneAppClientId: GoogleAPI.CLIENT_ID_STANDALONE,
                 webClientId: GoogleAPI.WEB_ID_STANDALONE,
-                scopes: ['profile', 'email', CALENDAR_SCOPE],
+                scopes: ['profile', 'email', GoogleAPI.CALENDAR_SCOPE],
             });
             if (result.type === 'success') {
                 currentUser.setUser(result);
                 this.props.navigation.navigate("Main");
                 ToastAndroid.show('Success', ToastAndroid.SHORT);
             } else {
+                ToastAndroid.show(result.type, ToastAndroid.LONG);
                 ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
             }
         } catch(e) {
+            ToastAndroid.show(e.message, ToastAndroid.LONG)
             ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
         }
     }
