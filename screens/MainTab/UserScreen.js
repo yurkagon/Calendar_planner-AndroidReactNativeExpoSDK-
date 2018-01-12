@@ -1,5 +1,6 @@
 import React from 'react';
 import currentUser from '../../Planner';
+import { NavigationActions } from 'react-navigation';
 import {
     Text,
     View,
@@ -13,6 +14,7 @@ export default class UserScreen extends React.Component {
     static navigationOptions = {
         title: "User profile"
     };
+    
 
     render() {
         return (
@@ -36,7 +38,13 @@ export default class UserScreen extends React.Component {
         );
     }
     logOut(){
-        this.props.navigation.navigate("Login");
+        this.props.navigation.dispatch(NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Login' }),
+            ],
+            key: null
+        }));
     }
 }
 class InfoField extends React.Component {

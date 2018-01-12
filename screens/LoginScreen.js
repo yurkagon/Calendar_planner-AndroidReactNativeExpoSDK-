@@ -29,16 +29,14 @@ export default class LoginScreen extends React.Component {
             });
             if (result.type === 'success') {
                 currentUser.setUser(result);
-                ToastAndroid.show(result.accessToken, ToastAndroid.LONG);
+
                 this.props.navigation.navigate("Main");
                 ToastAndroid.show('Success', ToastAndroid.SHORT);
             } else {
-                ToastAndroid.show(result.accessToken, ToastAndroid.LONG);
-                //ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
+                ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
             }
         } catch(e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG)
-            ToastAndroid.show('Failed! Try again', ToastAndroid.LONG);
         }
     }
 
