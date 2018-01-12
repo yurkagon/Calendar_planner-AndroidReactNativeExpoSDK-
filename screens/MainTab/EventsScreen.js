@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     ToastAndroid,
     TouchableHighlight,
+    RefreshControl,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import { MaterialIcons, MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
@@ -19,7 +20,8 @@ export default class EventsScreen extends React.Component {
 
         this.state = {
             events: [],
-            inputText: ''
+            inputText: '',
+            refreshing: false,
         };
     }
 
@@ -66,7 +68,11 @@ export default class EventsScreen extends React.Component {
             }
         }
     }
-
+    async onRefreshAsync(){
+        await this.setState({refreshing: true});
+        await this.getEventsListAsync();
+        this.setState({refreshing: false});
+    }
     render() {
         let arr = currentUser.sortDatesToDisplay(this.state.events);
         
@@ -120,6 +126,13 @@ export default class EventsScreen extends React.Component {
                                 />
                             );
                         }}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this.onRefreshAsync.bind(this)}
+                                colors={[Colors.outdatedColor]}
+                            />
+                          }
                         keyExtractor={(item, index) => index}
                     />
                     <RefreshButton press={()=>{
