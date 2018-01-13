@@ -33,26 +33,27 @@ export default class EventsScreen extends React.Component {
             loading: false,
         }
     }
-    async setDateAsync(){
+    async setDateAsync(currentDate){
+        let nowDate = new Date(currentDate);
         let date;
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
-                date: new Date(),
+                date: nowDate,
             });
             if (action !== DatePickerAndroid.dismissedAction) {
                 date = new Date(year,month,day)
             }
             else{
-                date = new Date();
+                date = nowDate;
             }
           } catch (e) {
-                date = new Date();
+                date = nowDate;
           }
         return date;
     }
-    async setTimeAsync(){
+    async setTimeAsync(currentDate){
         let time = {};
-        let now = new Date();
+        let now = new Date(currentDate);
         try {
             const {action, hour, minute} = await TimePickerAndroid.open({
               hour: now.getHours(),
@@ -62,24 +63,24 @@ export default class EventsScreen extends React.Component {
             if (action !== TimePickerAndroid.dismissedAction) {
                 time = {hour,minute};
             }else{
-                time = {hour:0,minute:0}
+                time = {hour:now.getHours(),minute:now.getMinutes()};
             }
           } catch (e) {
-            time = {hour:0,minute:0};
+            time = {hour:now.getHours(),minute:now.getMinutes()};
           }
         return time;
     }
     async setStartTimeAsync(){
-        let date = await this.setDateAsync();
-        let time = await this.setTimeAsync();
+        let date = await this.setDateAsync(this.state.startTime);
+        let time = await this.setTimeAsync(this.state.startTime);
         date.setHours(time.hour);
         date.setMinutes(time.minute);
         let startTime = new Date(date);
         this.setState({startTime});
     }
     async setEndTimeAsync(){
-        let date = await this.setDateAsync();
-        let time = await this.setTimeAsync();
+        let date = await this.setDateAsync(this.state.endTime);
+        let time = await this.setTimeAsync(this.state.endTime);
         date.setHours(time.hour);
         date.setMinutes(time.minute);
         let endTime = new Date(date);
