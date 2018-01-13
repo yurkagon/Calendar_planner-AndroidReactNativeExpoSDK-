@@ -79,7 +79,6 @@ export default class EventsScreen extends React.Component {
         let time = await this.setTimeAsync();
         date.setHours(time.hour);
         date.setMinutes(time.minute);
-
         let endTime = new Date(date);
         this.setState({endTime});
     }
@@ -114,6 +113,7 @@ export default class EventsScreen extends React.Component {
             if(!error){
                 ToastAndroid.show("Event is created", ToastAndroid.SHORT);
                 currentUser.Update();
+                this.resetPlanner()
             }
         }
     }
@@ -196,7 +196,7 @@ export default class EventsScreen extends React.Component {
             </View>
         );
     }
-    setBaseDates(){
+    resetPlanner(){
         let startTime = new Date();
         let endTime = new Date(startTime);
         endTime.setHours(endTime.getHours()+1);
@@ -204,6 +204,7 @@ export default class EventsScreen extends React.Component {
         this.setState({
             startTime,
             endTime,
+            inputText : ""
         });
     }
 }

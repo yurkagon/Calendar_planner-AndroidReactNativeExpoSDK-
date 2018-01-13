@@ -61,7 +61,6 @@ export default class EventsScreen extends React.Component {
                 }
                 return item;
             });
-            console.log(items)
         }catch(e){
             error = true;
         }finally {
