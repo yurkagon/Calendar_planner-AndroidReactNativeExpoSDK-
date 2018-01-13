@@ -1,5 +1,6 @@
 import React from 'react';
 import currentUser from '../../Planner';
+import {LoadingIndicator} from '../../YuragonComponents';
 import {
     Text,
     StyleSheet,
@@ -9,6 +10,7 @@ import {
     DatePickerAndroid,
     TimePickerAndroid,
     ToastAndroid,
+    ActivityIndicator,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -28,6 +30,7 @@ export default class EventsScreen extends React.Component {
             inputText:"",
             startTime,
             endTime,
+            loading: false,
         }
     }
     async setDateAsync(){
@@ -85,6 +88,7 @@ export default class EventsScreen extends React.Component {
     
     async MakeEventAsync(){
         let error = false;
+        this.setState({loading: true})
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
                 method: 'POST',
@@ -115,6 +119,7 @@ export default class EventsScreen extends React.Component {
                 currentUser.Update();
                 this.resetPlanner()
             }
+            this.setState({loading: false})
         }
     }
     render() {
@@ -125,74 +130,77 @@ export default class EventsScreen extends React.Component {
 
         return (
             <View style={styles.page}>
-                <MaterialIcons
-                    name="event"
-                    size={70}
-                    color="white"
-                />
-                <Field name="TITLE" >
-                    <View style={[styles.inputField,{marginBottom:20}]}>
-                        <TextInput
-                            editable = {true}
-                            maxLength = {40}
-                            style={{color: Colors.nowColor,fontSize:20,}}
-                            autoFocus={true}
-                            placeholder="Enter a title of the event"
-                            multiline={false}
-                            autoCorrect={false}
-                            underlineColorAndroid="white"
-                            selectionColor={Colors.nowColor}
-                            placeholderTextColor="rgba(81, 214, 74,0.7)"
-                            onChangeText={(inputText) => this.setState({inputText})}
-                            value={this.state.inputText}
-                        />
-                    </View>
-                </Field>
-                <Field name="START TIME">
-                    <TouchableOpacity
-                        style={styles.inputField}
-                        activeOpacity={0.7}
-                        onPress={this.setStartTimeAsync.bind(this)}
-                    >
-                        <Text style={styles.date}>
-                            {currentUser.formatDateToDisplay(start.toJSON())}
-                        </Text>
-                    </TouchableOpacity>
-                </Field>
-                <Field name="END TIME">
-                    <TouchableOpacity
-                        style={styles.inputField}
-                        activeOpacity={0.7}
-                        onPress={this.setEndTimeAsync.bind(this)}
-                    >
-                        <Text style={styles.date}>
-                            {currentUser.formatDateToDisplay(end.toJSON())}
-                        </Text>
-                    </TouchableOpacity>
-                    {start < end && 
-                        <Text style={styles.resultText}>
-                            The event will be comming for {currentUser.formatTimeBetweenDates(this.state.startTime,this.state.endTime)}
-                        </Text>
+                <View style={styles.container}>
+                    <MaterialIcons
+                        name="event"
+                        size={70}
+                        color="white"
+                    />
+                    <Field name="TITLE" >
+                        <View style={[styles.inputField,{marginBottom:20}]}>
+                            <TextInput
+                                editable = {true}
+                                maxLength = {40}
+                                style={{color: Colors.nowColor,fontSize:20,}}
+                                autoFocus={true}
+                                placeholder="Enter a title of the event"
+                                multiline={false}
+                                autoCorrect={false}
+                                underlineColorAndroid="white"
+                                selectionColor={Colors.nowColor}
+                                placeholderTextColor="rgba(81, 214, 74,0.7)"
+                                onChangeText={(inputText) => this.setState({inputText})}
+                                value={this.state.inputText}
+                            />
+                        </View>
+                    </Field>
+                    <Field name="START TIME">
+                        <TouchableOpacity
+                            style={styles.inputField}
+                            activeOpacity={0.7}
+                            onPress={this.setStartTimeAsync.bind(this)}
+                        >
+                            <Text style={styles.date}>
+                                {currentUser.formatDateToDisplay(start.toJSON())}
+                            </Text>
+                        </TouchableOpacity>
+                    </Field>
+                    <Field name="END TIME">
+                        <TouchableOpacity
+                            style={styles.inputField}
+                            activeOpacity={0.7}
+                            onPress={this.setEndTimeAsync.bind(this)}
+                        >
+                            <Text style={styles.date}>
+                                {currentUser.formatDateToDisplay(end.toJSON())}
+                            </Text>
+                        </TouchableOpacity>
+                        {start < end && 
+                            <Text style={styles.resultText}>
+                                The event will be comming for {currentUser.formatTimeBetweenDates(this.state.startTime,this.state.endTime)}
+                            </Text>
+                        }
+                        {start > end && 
+                            <Text style={styles.resultText}>
+                                Please, enter correct dates
+                            </Text>
+                        }
+                    </Field>
+                    {start < end && this.state.inputText.length > 0 &&
+                        <TouchableOpacity
+                            style={{marginTop:40}}
+                            activeOpacity={0.7}
+                            onPress={this.MakeEventAsync.bind(this)}
+                        >
+                            <MaterialIcons
+                                name="add-box"
+                                size={100}
+                                color="white"
+                            />
+                        </TouchableOpacity>
                     }
-                    {start > end && 
-                        <Text style={styles.resultText}>
-                            Please, enter correct dates
-                        </Text>
-                    }
-                </Field>
-                {start < end && this.state.inputText.length > 0 &&
-                    <TouchableOpacity
-                        style={{marginTop:40}}
-                        activeOpacity={0.7}
-                        onPress={this.MakeEventAsync.bind(this)}
-                    >
-                        <MaterialIcons
-                            name="add-box"
-                            size={100}
-                            color="white"
-                        />
-                    </TouchableOpacity>
-                }
+                </View>
+                <LoadingIndicator enabled={true} color={Colors.nowColor}/>
             </View>
         );
     }
@@ -209,6 +217,8 @@ export default class EventsScreen extends React.Component {
     }
 }
 
+
+
 class Field extends React.Component {
     render() {
         return (
@@ -219,12 +229,16 @@ class Field extends React.Component {
         );
     }
 }
+
+
 const styles = StyleSheet.create({
     page: {
         flex: 1,
         backgroundColor: Colors.nowColor,
+    },
+    container:{
         padding: 20,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     TitleInput:{
         flexDirection: 'column',
