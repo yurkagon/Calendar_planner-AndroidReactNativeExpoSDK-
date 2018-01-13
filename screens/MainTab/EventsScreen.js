@@ -48,20 +48,25 @@ export default class EventsScreen extends React.Component {
             });
             items = JSON.parse(response._bodyText).items;
             if(!Array.isArray(items)) throw "error";
-            //if no summury
+            //if no some info
             items = items.map((item)=>{
                 if(typeof item.summary == "undefined"){
                     item.summary = "No information";
-                    return item;
+                }
+                if(typeof item.start.dateTime == "undefined" || typeof item.end.dateTime == "undefined"){
+                    let start = new Date(item.start.date);
+                    let end = new Date(item.end.date);
+                    item.start.dateTime = start.toJSON();
+                    item.end.dateTime = end.toJSON();
                 }
                 return item;
-            })
+            });
+            console.log(items)
         }catch(e){
             error = true;
         }finally {
             if(!error){
                 currentUser.arrayOfEvents = items;
-                //ToastAndroid.show('WORKS!', ToastAndroid.SHORT)
                 this.setState({
                     events: items,
                 });
@@ -100,15 +105,15 @@ export default class EventsScreen extends React.Component {
                 <View style={styles.page}>
                     <View style={styles.inputContainer}>
                         <TextInput
-                             style={styles.TextInput}
-                             onChangeText={(inputText) => this.setState({inputText})}
-                             value={this.state.inputText}
-                             maxLength = {40}
-                             multiline={false}
-                             autoCorrect={false}
-                             placeholder="Search..."
-                             selectionColor="#4680dd"
-                             underlineColorAndroid="#4680dd"
+                            style={styles.TextInput}
+                            onChangeText={(inputText) => this.setState({inputText})}
+                            value={this.state.inputText}
+                            maxLength = {40}
+                            multiline={false}
+                            autoCorrect={false}
+                            placeholder="Search..."
+                            selectionColor="#4680dd"
+                            underlineColorAndroid="#4680dd"
                         />
                         <MaterialIcons
                             name={'search'}

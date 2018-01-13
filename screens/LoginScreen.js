@@ -29,7 +29,6 @@ export default class LoginScreen extends React.Component {
             });
             if (result.type === 'success') {
                 currentUser.setUser(result);
-
                 this.props.navigation.navigate("Main");
                 ToastAndroid.show('Success', ToastAndroid.SHORT);
             } else {
