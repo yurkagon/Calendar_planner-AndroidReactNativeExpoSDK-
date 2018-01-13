@@ -14,7 +14,7 @@ class User{
     setUpdator(method){
         this._updator = method;
     }
-    Update(){
+    async Update(){
         this._updator();
     }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import currentUser from '../../Planner';
 import Colors from '../../constants/Colors';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {LoadingIndicator} from '../../YuragonComponents';
 import {
     Text,
     View,

@@ -40,8 +40,8 @@ export class LoadingIndicator extends React.Component{
                 <View style={this.li.bg}>
                     <View style={this.li.indBg}>
                         <ActivityIndicator 
-                            size="large" color={this.props.color?this.props.color:"blue"} 
-                            animating={(!!this.props.enabled)?this.props.enabled:true} 
+                            size="large" color={this.props.color} 
+                            animating={this.props.enabled} 
                         />
                     </View>
                 </View>

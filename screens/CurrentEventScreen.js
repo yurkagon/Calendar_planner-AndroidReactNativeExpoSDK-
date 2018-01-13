@@ -2,6 +2,7 @@ import React from 'react';
 import Expo from 'expo';
 import currentUser from '../Planner';
 import GoogleAPI from '../constants/GoogleAPI';
+import {LoadingIndicator} from '../YuragonComponents';
 import { 
     StyleSheet,
     Text,
@@ -18,11 +19,19 @@ export default class CurrentEventScreen extends React.Component {
         title: currentUser.formatTextToDisplayByLimit(navigation.state.params.obj.summary.toUpperCase(),20),
     });
 
+    constructor(props){
+        super(props);
+
+        this.state={
+            loading: false,
+        }
+    }
+
     async removeEventAsync(){
         const ID = this.props.navigation.state.params.obj.id;
         const TITLE = currentUser.formatTextToDisplayByLimit(this.props.navigation.state.params.obj.summary,15);
         let error = false;
-       
+        this.setState({loading:true});
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/' + ID,{
                 method: 'DELETE',
@@ -37,9 +46,11 @@ export default class CurrentEventScreen extends React.Component {
         }finally{
             if(!error){
                 ToastAndroid.show(TITLE + " is removed", ToastAndroid.SHORT);
-                currentUser.Update();
+                await currentUser.Update();
+                this.setState({loading:false});
                 this.props.navigation.goBack();
             }
+            else this.setState({loading:false});
         }
     }
     render() {
@@ -49,6 +60,7 @@ export default class CurrentEventScreen extends React.Component {
         createdTime.setHours(createdTime.getHours() - createdTime.getTimezoneOffset() / 60);
         return (
             <View style={styles.page}>
+            <View style={styles.pageCont}>
                 <View style={styles.container}>
                     <MaterialIcons
                         name={objectType.iconName}
@@ -106,6 +118,8 @@ export default class CurrentEventScreen extends React.Component {
                     />
                 </TouchableOpacity>
             </View>
+                <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
+            </View>
         );
         function setObjectType(ev){
             let startTime = new Date(ev.start.dateTime);
@@ -144,6 +158,10 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
         backgroundColor: '#fff',
+        padding: 20,
+        alignItems: 'center',
+    },
+    pageCont:{
         padding: 20,
         alignItems: 'center',
     },

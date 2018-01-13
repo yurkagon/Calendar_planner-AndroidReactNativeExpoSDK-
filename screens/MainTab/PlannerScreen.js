@@ -142,7 +142,6 @@ export default class EventsScreen extends React.Component {
                                 editable = {true}
                                 maxLength = {40}
                                 style={{color: Colors.nowColor,fontSize:20,}}
-                                autoFocus={true}
                                 placeholder="Enter a title of the event"
                                 multiline={false}
                                 autoCorrect={false}
@@ -200,7 +199,7 @@ export default class EventsScreen extends React.Component {
                         </TouchableOpacity>
                     }
                 </View>
-                <LoadingIndicator enabled={true} color={Colors.nowColor}/>
+                <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
             </View>
         );
     }
@@ -216,8 +215,6 @@ export default class EventsScreen extends React.Component {
         });
     }
 }
-
-
 
 class Field extends React.Component {
     render() {
