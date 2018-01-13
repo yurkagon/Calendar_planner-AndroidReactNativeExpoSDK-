@@ -66,7 +66,7 @@ export default class EventsScreen extends React.Component {
         }finally {
             if(!error){
                 currentUser.arrayOfEvents = items;
-                this.setState({
+                await this.setState({
                     events: items,
                 });
             }

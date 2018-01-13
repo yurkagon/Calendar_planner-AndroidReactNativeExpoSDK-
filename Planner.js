@@ -10,6 +10,7 @@ class User{
         this._arrayOfEvents = [];
 
         this._updator = null;
+
     }
     setUpdator(method){
         this._updator = method;

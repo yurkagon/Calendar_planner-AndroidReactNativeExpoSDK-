@@ -14,6 +14,7 @@ export default class StatusScreen extends React.Component {
         super(props);
         this.state = {
             events: currentUser.arrayOfEvents,
+            loading: true,
         }
     }
 
@@ -21,6 +22,7 @@ export default class StatusScreen extends React.Component {
         this.timer = setInterval(()=>{
             this.setState({
                 events: currentUser.arrayOfEvents,
+                loading: false,
             })
         },1000);
     }
@@ -85,7 +87,7 @@ export default class StatusScreen extends React.Component {
                         </Text>
                     </View>   
                 }
-                
+                 <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
             </View>
         );
     }
