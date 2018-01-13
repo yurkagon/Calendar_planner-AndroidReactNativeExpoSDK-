@@ -107,7 +107,6 @@ export default class EventsScreen extends React.Component {
                     "summary": this.state.inputText
                 })
             });
-            console.log(response)
             if(response.ok != true){
                 throw 'error';
             }

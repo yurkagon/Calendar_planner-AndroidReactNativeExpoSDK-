@@ -7,6 +7,7 @@ import {
     Text,
     View,
     StyleSheet,
+    ViewPagerAndroid,
 } from 'react-native';
 
 export default class StatusScreen extends React.Component {
@@ -32,7 +33,7 @@ export default class StatusScreen extends React.Component {
 
     render() {
         //getting index of event that is now
-        let nowIndex = this.state.events.findIndex(ev=>{
+        let nowArr = this.state.events.filter(ev=>{
             let startTime = new Date(ev.start.dateTime);
             let endTime = new Date(ev.end.dateTime)
             let nowDate = new Date();
@@ -41,19 +42,21 @@ export default class StatusScreen extends React.Component {
 
             return nowDate >= startTime && nowDate <= endTime;
         });
-        if(nowIndex != -1){
-            let event = this.state.events[nowIndex];
+        if(nowArr.length > 0){
+            let nowEvents = nowArr.map((ev,key)=>{
+                return (
+                    <View style={styles.pageStyle} key={key}>
+                        <NowEvent event={ev}/>
+                    </View>
+                );
+            });
             return(
-                <View style={[styles.page,{backgroundColor:Colors.nowColor}]}>
-                    <Text style={[styles.eventText,{fontSize: 30}]}>Now is:</Text>
-                    <Text style={[styles.eventText,{fontSize: 60}]}>
-                        {currentUser.formatTextToDisplayByLimit(event.summary.toUpperCase(),20)}
-                    </Text>
-                    <Text style={[styles.eventText,{fontSize: 15}]}>
-                        {currentUser.formatTimeBetweenDates(new Date(),new Date(event.end.dateTime))}
-                        to end of the event.
-                    </Text>
-                </View>
+                <ViewPagerAndroid
+                    style={[styles.page,{backgroundColor:Colors.nowColor}]}
+                    initialPage={0}
+                >
+                    {nowEvents}
+                </ViewPagerAndroid>
             );
         }
         //if no events now
@@ -96,6 +99,22 @@ export default class StatusScreen extends React.Component {
     };
 }
 
+class NowEvent extends React.Component{
+    render(){
+        return(
+            <View>
+                <Text style={[styles.eventText,{fontSize: 30}]}>Now is:</Text>
+                <Text style={[styles.eventText,{fontSize: 60}]}>
+                    {currentUser.formatTextToDisplayByLimit(this.props.event.summary.toUpperCase(),20)}
+                </Text>
+                <Text style={[styles.eventText,{fontSize: 15}]}>
+                    {currentUser.formatTimeBetweenDates(new Date(),new Date(this.props.event.end.dateTime))}
+                    to end of the event.
+                </Text>
+            </View>
+        )
+    }
+}
 
 const styles  = StyleSheet.create({
     page: {
@@ -107,5 +126,12 @@ const styles  = StyleSheet.create({
     eventText:{
         color: 'white',
         textAlign: 'center',
+    },
+    viewPager: {
+        flex: 1
+      },
+    pageStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 });
