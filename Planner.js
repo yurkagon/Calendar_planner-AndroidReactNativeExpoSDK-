@@ -12,6 +12,13 @@ class User{
         this._updator = null;
 
     }
+    reset(){
+        this._name = null;
+        this._mail = null;
+        this._avatar = null;
+        this._accessToken = null;
+        this._arrayOfEvents = [];
+    }
     setUpdator(method){
         this._updator = method;
     }

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import { MaterialIcons, MaterialCommunityIcons,Ionicons} from '@expo/vector-icons';
+import {LoadingIndicator} from '../../YuragonComponents';
 
 export default class EventsScreen extends React.Component {
     constructor(props){
@@ -22,6 +23,7 @@ export default class EventsScreen extends React.Component {
             events: [],
             inputText: '',
             refreshing: false,
+            loading: true,
         };
     }
 
@@ -70,6 +72,7 @@ export default class EventsScreen extends React.Component {
                     events: items,
                 });
             }
+            this.setState({loading: false});
         }
     }
     async onRefreshAsync(){
@@ -94,9 +97,12 @@ export default class EventsScreen extends React.Component {
                         color={Colors.outdatedColor}
                         style={styles.noEventsImage}
                     />
-                    <RefreshButton press={()=>{
-                        this.getEventsListAsync(currentUser.accessToken) 
-                    }}/>
+                    {!this.state.loading &&
+                        <RefreshButton press={()=>{
+                            this.getEventsListAsync(currentUser.accessToken) 
+                        }}/>
+                    }
+                    <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
                 </View>
             )
         } else{
@@ -139,9 +145,6 @@ export default class EventsScreen extends React.Component {
                           }
                         keyExtractor={(item, index) => index}
                     />
-                    <RefreshButton press={()=>{
-                        this.getEventsListAsync(currentUser.accessToken) 
-                    }}/>
                 </View>
             );
         }

@@ -38,6 +38,7 @@ export default class UserScreen extends React.Component {
         );
     }
     logOut(){
+        currentUser.reset();
         this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
             actions: [

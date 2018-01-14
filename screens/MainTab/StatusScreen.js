@@ -90,7 +90,7 @@ export default class StatusScreen extends React.Component {
                         </Text>
                     </View>   
                 }
-                 <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
+                <LoadingIndicator enabled={this.state.loading} color={Colors.nowColor}/>
             </View>
         );
     }
