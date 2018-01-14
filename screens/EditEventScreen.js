@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import {MaterialIcons,Ionicons,Foundation} from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
 
 export default class EventsScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -88,7 +89,6 @@ export default class EventsScreen extends React.Component {
     
     async MakeEventAsync(){
         let error = false;
-        //this.setState({loading: true})
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
                 method: 'POST',
@@ -111,12 +111,7 @@ export default class EventsScreen extends React.Component {
             }
         }catch(e){
             error = true;
-            //ToastAndroid.show('Failed to make the event', ToastAndroid.SHORT);
-        }finally{
-            if(!error){
-              //  ToastAndroid.show("Event is created", ToastAndroid.SHORT);
-            }
-            //this.setState({loading: false})
+            ToastAndroid.show('Failed', ToastAndroid.SHORT);
         }
     }
 
@@ -124,7 +119,6 @@ export default class EventsScreen extends React.Component {
         const ID = this.props.navigation.state.params.obj.id;
         const TITLE = currentUser.formatTextToDisplayByLimit(this.props.navigation.state.params.obj.summary,15);
         let error = false;
-        //this.setState({loading:true});
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/' + ID,{
                 method: 'DELETE',
@@ -138,10 +132,7 @@ export default class EventsScreen extends React.Component {
         }finally{
             if(!error){
                 await currentUser.Update();
-                //this.setState({loading:false});
-                //this.props.navigation.goBack();
             }
-            //else this.setState({loading:false});
         }
     }
 
@@ -149,8 +140,19 @@ export default class EventsScreen extends React.Component {
         await this.setState({loading:true});
         await this.removeEventAsync();
         await this.MakeEventAsync();
-        currentUser.Update();
+        await currentUser.Update();
         await this.setState({loading:false});
+
+        this.props.navigation.dispatch(
+            {
+                type: 'Navigation/NAVIGATE',
+                routeName: 'Main',
+                action: {
+                    type: 'Navigation/NAVIGATE',
+                    routeName: 'Events',
+                }
+            }
+        );
     }
     render() {
         let start = new Date(this.state.startTime);
