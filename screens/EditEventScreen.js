@@ -88,7 +88,7 @@ export default class EventsScreen extends React.Component {
     
     async MakeEventAsync(){
         let error = false;
-        this.setState({loading: true})
+        //this.setState({loading: true})
         try{
             let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
                 method: 'POST',
@@ -111,17 +111,47 @@ export default class EventsScreen extends React.Component {
             }
         }catch(e){
             error = true;
-            ToastAndroid.show('Failed to make the event', ToastAndroid.SHORT);
+            //ToastAndroid.show('Failed to make the event', ToastAndroid.SHORT);
         }finally{
             if(!error){
-                ToastAndroid.show("Event is created", ToastAndroid.SHORT);
-                currentUser.Update();
+              //  ToastAndroid.show("Event is created", ToastAndroid.SHORT);
             }
-            this.setState({loading: false})
+            //this.setState({loading: false})
         }
     }
 
+    async removeEventAsync(){
+        const ID = this.props.navigation.state.params.obj.id;
+        const TITLE = currentUser.formatTextToDisplayByLimit(this.props.navigation.state.params.obj.summary,15);
+        let error = false;
+        //this.setState({loading:true});
+        try{
+            let response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/' + ID,{
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${currentUser.accessToken}`},
+            });
+            if(response.ok != true){
+                throw 'error';
+            }
+        }catch(e){
+            error = true;
+        }finally{
+            if(!error){
+                await currentUser.Update();
+                //this.setState({loading:false});
+                //this.props.navigation.goBack();
+            }
+            //else this.setState({loading:false});
+        }
+    }
 
+    async updateEventAsync(){
+        await this.setState({loading:true});
+        await this.removeEventAsync();
+        await this.MakeEventAsync();
+        currentUser.Update();
+        await this.setState({loading:false});
+    }
     render() {
         let start = new Date(this.state.startTime);
         let end = new Date(this.state.endTime);
@@ -189,7 +219,7 @@ export default class EventsScreen extends React.Component {
                         <TouchableOpacity 
                             style={[styles.button,{backgroundColor: Colors.nowColor}]}
                             activeOpacity={0.7}
-                            //onPress={this.getOnEditEventScreen.bind(this)}
+                            onPress={this.updateEventAsync.bind(this)}
                         >   
                             <Text style={{color:'white',fontSize:20}}>Update information &#160;</Text>
                             <Foundation
