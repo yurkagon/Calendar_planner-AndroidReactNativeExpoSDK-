@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import LoginScreen from '../screens/LoginScreen';
 import CurrentEventScreen from '../screens/CurrentEventScreen';
+import EditEventScreen from '../screens/EditEventScreen';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 
@@ -18,7 +19,10 @@ const RootStackNavigator = StackNavigator(
     },
     CurrentEvent:{
       screen: CurrentEventScreen,
-    }
+    },
+    EditEvent:{
+      screen: EditEventScreen,
+    },
   },
   {
     navigationOptions: () => ({

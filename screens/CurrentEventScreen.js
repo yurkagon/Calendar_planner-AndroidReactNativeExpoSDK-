@@ -108,9 +108,9 @@ export default class CurrentEventScreen extends React.Component {
                     <TouchableOpacity 
                         style={[styles.button,{backgroundColor: Colors.nowColor}]}
                         activeOpacity={0.7}
-                        //onPress={this.removeEventAsync.bind(this)}
+                        onPress={this.getOnEditEventScreen.bind(this)}
                     >   
-                        <Text style={{color:'white',fontSize:20}}>Edit the event</Text>
+                        <Text style={{color:'white',fontSize:20}}>Edit the event &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</Text>
                         <Foundation
                             name="page-edit"
                             size={40}
@@ -152,6 +152,10 @@ export default class CurrentEventScreen extends React.Component {
                 return {iconName:"event",color: Colors.nowColor,text:"now"};
             }
         }
+    }
+
+    getOnEditEventScreen(){
+        this.props.navigation.navigate("EditEvent",{obj:this.props.navigation.state.params.obj});
     }
 }
 
