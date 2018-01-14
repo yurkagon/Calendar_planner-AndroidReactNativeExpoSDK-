@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Linking,
 } from 'react-native';
-import { MaterialIcons,Ionicons } from '@expo/vector-icons';
+import { MaterialIcons,Ionicons,Foundation } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 export default class CurrentEventScreen extends React.Component {
@@ -106,6 +106,18 @@ export default class CurrentEventScreen extends React.Component {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity 
+                        style={[styles.button,{backgroundColor: Colors.nowColor}]}
+                        activeOpacity={0.7}
+                        //onPress={this.removeEventAsync.bind(this)}
+                    >   
+                        <Text style={{color:'white',fontSize:20}}>Edit the event</Text>
+                        <Foundation
+                            name="page-edit"
+                            size={40}
+                            color="white"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity 
                         style={[styles.button,{backgroundColor: Colors.errorColor}]}
                         activeOpacity={0.7}
                         onPress={this.removeEventAsync.bind(this)}
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
     },
     container:{
         flexDirection: 'row',
-        marginBottom: 30,
+        marginBottom: 10,
     },
     button:{
         flexDirection: 'row',
